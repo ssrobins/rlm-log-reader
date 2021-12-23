@@ -1,0 +1,13 @@
+
+RLM Report Log Format 0, version 9.0, authenticated
+ISV: demo, RLM version 9.4 BL2
+Logfile format Copyright (C) 2006-2012 Reprise Software, Inc.
+For documentation on this format, email info@reprisesoftware.com
+You are encouraged to build tools to process this data.
+
+START ServerSector7 01/07/2014 00:00:12
+LICENSE FILE ./license.lic
+PRODUCT analytics 13.0 5 400 0 400 "" "" "Licensed to: Sephiroth" "Shinra Corporation" "" "" 4 0 0 0 0 0 0 0 0
+01/07/2014 10:01
+OUT analytics 12.0 5 Barret win8desktop "ISV_Def Stuff" 14 56 0 5dd 5dd 171c "" "" "" 01/07 10:15:12
+IN 1 analytics 12.0 Barret win8desktop "ISV_Def Stuff" 14 42 0 5dd 01/07 10:15:12

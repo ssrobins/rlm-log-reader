@@ -1,0 +1,5 @@
+#pragma once
+
+const string testInputDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/TestFiles";
+const string extraTestDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/ExtraTestFiles";
+const string testOutputDirectory = "@CMAKE_CURRENT_BINARY_DIR@/TestResults";

@@ -1,0 +1,7 @@
+#pragma once
+
+const string appTitle = "@app_title@";
+const string appTitleNoSpaces = "@project_name@";
+const string versionMajor = "@VERSION_MAJOR@";
+const string versionMinor = "@VERSION_MINOR@";
+const string versionPatch = "@VERSION_PATCH@";

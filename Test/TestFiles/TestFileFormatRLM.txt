@@ -1,0 +1,15 @@
+09/21 18:44 (rlm) RLM License Server Version 8.0BL4
+
+	Copyright (C) 2006-2010, Reprise Software, Inc. All rights reserved
+
+09/21 18:44 (rlm) License server started on Win2008
+09/21 18:44 (rlm) Server architecture: x64_w2
+09/21 18:44 (rlm) License files:
+09/21 18:44 (rlm)     C:\RLM\license.lic
+09/21 18:44 (rlm)     license.lic
+09/21 18:44 (rlm) 
+09/21 18:44 (rlm) Web server starting on port 5054
+09/21 18:44 (rlm) Using TCP/IP port 27100
+09/21 18:44 (rlm) Starting ISV servers:
+09/21 18:44 (rlm)     ... demo on port 27101
+09/21 18:44 (rlm) New thread created to watch ISV demo

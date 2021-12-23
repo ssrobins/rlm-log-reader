@@ -1,0 +1,23 @@
+
+RLM Report Log Format 0, version 8.0, authenticated
+ISV: demo, RLM version 8.0 BL3
+Logfile format Copyright (C) 2006-2010 Reprise Software, Inc.
+For documentation on this format, email info@reprisesoftware.com
+You are encouraged to build tools to process this data.
+
+START localhost.localdomain 11/30/2012 23:12:29
+LICENSE FILE license.lic
+PRODUCT datavis 3.12 1 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT plotter 3.12 2 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT simulator 3.12 3 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT analytics 3.12 4 4 0 4 "" "" "" "" "" "" 0 0 0 0
+11/30/2012 23:12
+OUT datavis 2.04 1 cecil win7_xeon ""
+REREAD webuser localhost.localdomain 11/30 23:12:47
+PRODUCT datavis 3.12 1 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT plotter 3.12 2 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT simulator 3.12 3 4 0 4 "" "" "" "" "" "" 0 0 0 0
+PRODUCT analytics 3.12 4 4 0 4 "" "" "" "" "" "" 0 0 0 0
+OUT datavis 2.04 1 cecil win7_xeon "" 1 2 0 81 81 205c "" "" "" 11/30 23:12:52
+IN 1 datavis 2.04 cecil win7_xeon "" 1 1 0 81 11/30 23:12:56
+IN 1 datavis 2.04 cecil win7_xeon "" 1 0 0 41 11/30 23:12:59
