@@ -21,6 +21,57 @@ set (app_title "RLM Log Reader")
 set (project_name "RLMLogReader")
 project (${project_name})
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(APPLE)
+    string(REGEX MATCH "[0-9]+\.[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+elseif(MSVC)
+    string(REGEX MATCH "[0-9]+\.[0-9]" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+    string(REPLACE "." "" compiler_version ${compiler_version})
+else()
+    string(REGEX MATCH "[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND ${compiler_version} LESS 8)
+        string(REGEX MATCH "[0-9]+\.[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+    endif()
+endif()
+
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+    set(conan_args -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+elseif(UNIX)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(compiler clang)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set(compiler gcc)
+    else()
+        message("Unhandled compiler, ${CMAKE_CXX_COMPILER_ID}, Conan install command may fail")
+    endif()
+    set(conan_args -s compiler=${compiler} -s compiler.version=${compiler_version} -s compiler.libcxx=libstdc++11 -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+elseif(MSVC)
+    set(conan_args -s arch=x86 -s compiler=msvc -s compiler.version=${compiler_version} -s compiler.runtime=static -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+else()
+    message("Unhandled platform, Conan install command may fail")
+endif()
+
+option(CONAN_BUILD_MISSING_PKGS "Build missing Conan packages" ON)
+if(CONAN_BUILD_MISSING_PKGS)
+    set(conan_build_option --build=missing)
+endif()
+
+execute_process(
+    COMMAND conan remote add artifactory-ssrobins https://ssrobins.jfrog.io/artifactory/api/conan/conan --insert --force
+    COMMAND conan remote add conancenter https://center.conan.io --insert --force
+    COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_args}
+    RESULT_VARIABLE conan_result
+)
+if(conan_result)
+    message(FATAL_ERROR "Conan error")
+endif()
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
+
 set (VERSION_MAJOR 1)
 set (VERSION_MINOR 1)
 set (VERSION_PATCH 0)
@@ -35,15 +86,11 @@ configure_file (
   )
 
 # Boost
-set (Boost_USE_STATIC_LIBS ON)
-set (Boost_USE_MULTITHREADED ON)
-set (Boost_USE_STATIC_RUNTIME OFF)
-find_package (Boost COMPONENTS date_time system filesystem REQUIRED)
-include_directories (${Boost_INCLUDE_DIRS})
+find_package(Boost REQUIRED)
 
 # Qt
-find_package (Qt4 REQUIRED)
-include (${QT_USE_FILE})
+#find_package (Qt4 REQUIRED)
+#include (${QT_USE_FILE})
 
 # Source files
 set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
@@ -52,23 +99,23 @@ set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
 set (HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
 
 # Any header file with Qt's Q_OBJECT in it must be wrapped
-QT4_WRAP_CPP(QtMockSources MainWindow.h)
+#QT4_WRAP_CPP(QtMockSources MainWindow.h)
 
 # Qt UI files
-QT4_WRAP_UI(QtUIFiles MainWindow.ui)
+#QT4_WRAP_UI(QtUIFiles MainWindow.ui)
 
 # Qt resources
-QT4_ADD_RESOURCES(QtResources graphics.qrc)
+#QT4_ADD_RESOURCES(QtResources graphics.qrc)
 
 # Include the current binary directory so code that uses auto-generated ui headers can be built
 # Include the project binary directory so the MainWindowConfig.h file can be found
 include_directories(${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_BINARY_DIR}")
 
 # GTest
-set (gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-add_subdirectory (gtest-1.6.0)
+#set (gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
+#add_subdirectory (gtest-1.6.0)
 add_subdirectory (Test)
-include_directories(gtest-1.6.0/include)
+#include_directories(gtest-1.6.0/include)
 
 
 # Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
