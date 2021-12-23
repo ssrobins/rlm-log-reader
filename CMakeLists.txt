@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with RLM Log Reader.  If not, see <http:#www.gnu.org/licenses/>.
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 3.21)
 
 set (app_title "RLM Log Reader")
 set (project_name "RLMLogReader")
