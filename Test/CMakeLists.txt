@@ -32,6 +32,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(${project_name} UnitTests.cpp IntegrationTests.cpp ../LogData.cpp ../Utilities.cpp TestConfig.h.in)
 target_link_libraries(${project_name}
+    CONAN_PKG::boost
     CONAN_PKG::gtest
 )
 
