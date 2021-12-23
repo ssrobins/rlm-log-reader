@@ -1,0 +1,43 @@
+05/11 15:16 (demo) Report log started on ./report.log
+05/11 15:16 (demo) 
+05/11 15:16 (demo) Server started on Win2008 (hostid: 6fc049e3e83d) for:
+05/11 15:16 (demo) 	simulator analytics 
+05/11 15:16 (demo) 
+05/11 15:16 (demo) License files:
+05/11 15:16 (demo)     C:\RLM\license.lic
+05/11 15:16 (demo)     license.lic
+05/11 15:16 (demo) 
+05/11 15:17 (demo) OUT: analytics v2.09 by cecil@win2008 
+05/11 15:19 (demo) OUT: simulator v2.12 by terra@ubuntu 
+05/11 15:20 (demo) DENIED: (1) simulator v2.1 to cecil@win2008 
+05/11 15:20 (demo)         All licenses in use
+05/11 15:22 (demo) IN: simulator v2.12 by terra@ubuntu 
+05/11 15:23 (demo) Shutdown request by webuser@win2008
+05/11 15:24 (demo) Report log started on ./report.log
+05/11 15:24 (demo) 
+05/11 15:24 (demo) Server started on Win2008 (hostid: 6fc049e3e83d) for:
+05/11 15:24 (demo) 	datavis analytics simulator 
+05/11 15:24 (demo) 
+05/11 15:24 (demo) License files:
+05/11 15:24 (demo)     C:\RLM\license.lic
+05/11 15:24 (demo)     license.lic
+05/11 15:24 (demo) 
+05/11 15:25 (demo) OUT: datavis v2.04 by cecil@win2008 
+05/11 15:26 (demo) OUT: analytics v3.03 by terra@ubuntu 
+05/11 15:28 (demo) OUT: datavis v3.01 by cecil@redhat 
+05/11 16:07 (demo) IN: analytics v3.03 by terra@ubuntu 
+05/12 00:00 (demo) ==== Reread request by automatic@midnight ====
+05/12 00:00 (demo) WARNING: Duplicate datavis license
+05/12 00:00 (demo) WARNING: Duplicate analytics license
+05/12 00:00 (demo) WARNING: Duplicate simulator license
+05/12 00:00 (demo) Using options file demo.opt
+05/12 00:00 (demo) Switching debug log to +./demo.log
+05/12 00:00 (demo) 
+05/12 00:00 (demo) Re-reading license files, supporting products:
+05/12 00:00 (demo) 	datavis analytics simulator 
+05/12 00:00 (demo) 
+05/12 00:00 (demo) License files:
+05/12 00:00 (demo)     C:\RLM\license.lic
+05/12 00:00 (demo)     license.lic
+05/12 00:00 (demo) 
+05/12 01:32 (demo) IN: datavis v3.01 by terra@ubuntu 

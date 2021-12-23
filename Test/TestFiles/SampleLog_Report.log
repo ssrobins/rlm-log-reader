@@ -1,0 +1,63 @@
+
+RLM Report Log Format 0, version 10.0, authenticated
+ISV: demo, RLM version 10.0 BL2
+Logfile format Copyright (C) 2006-2013 Reprise Software, Inc.
+For documentation on this format, email info@reprisesoftware.com
+You are encouraged to build tools to process this data.
+
+START Win2008 05/11/2013 15:16:49
+LICENSE FILE C:\RLM\license.lic
+LICENSE FILE license.lic
+PRODUCT simulator 3.12 1 1 0 1 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+PRODUCT analytics 3.12 2 2 0 2 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+05/11/2013 15:16
+OUT analytics 2.09 2 cecil win2008 "" 1 1 0 41 41 1a14 "" "" "" 05/11 15:17:14
+OUT simulator 2.12 1 terra ubuntu "" 1 1 0 81 81 c79e "" "" "" 05/11 15:19:08
+DENY simulator 2.1 cecil win2008 "" 1 -22 1 05/11 15:20
+IN 1 simulator 2.12 terra ubuntu "" 1 0 0 81 05/11 15:22:13
+INUSE analytics 3.12 2 cecil win2008 "" 1 41 1a14 05/11 15:23:15
+SHUTDOWN webuser win2008 05/11 15:23:15
+AUTH: 1 60pg4580jf8npa9xah1yjmdcg4x5e6htnbum40py08a0rr4k9q7qxex9rccgr7m3bdc9r98bq500
+
+RLM Report Log Format 0, version 10.0, authenticated
+ISV: demo, RLM version 10.0 BL2
+Logfile format Copyright (C) 2006-2013 Reprise Software, Inc.
+For documentation on this format, email info@reprisesoftware.com
+You are encouraged to build tools to process this data.
+
+START Win2008 05/11/2013 15:24:28
+LICENSE FILE C:\RLM\license.lic
+LICENSE FILE license.lic
+PRODUCT datavis 3.12 1 10 0 10 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+PRODUCT analytics 3.12 2 3 0 3 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+PRODUCT simulator 3.12 3 50 0 50 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+05/11/2013 15:24
+OUT datavis 2.04 1 cecil win2008 "" 1 1 0 41 41 3ec "" "" "" 05/11 15:25:00
+OUT analytics 3.03 2 terra ubuntu "" 1 1 0 81 81 c7c8 "" "" "" 05/11 15:26:36
+OUT datavis 3.01 1 cecil redhat "" 1 2 0 c1 c1 c823 "" "" "" 05/11 15:28:06
+05/11/2013 15:54
+IN 1 analytics 3.03 terra ubuntu "" 1 0 0 81 05/11 16:07:39
+05/11/2013 16:25
+05/11/2013 16:55
+05/11/2013 17:26
+05/11/2013 17:56
+05/11/2013 18:27
+05/11/2013 18:57
+05/11/2013 19:28
+05/11/2013 19:58
+05/11/2013 20:29
+05/11/2013 20:59
+05/11/2013 21:30
+05/11/2013 22:00
+05/11/2013 22:31
+05/11/2013 23:01
+05/11/2013 23:32
+05/12/2013 00:00
+REREAD automatic midnight 05/12 00:00:38
+PRODUCT datavis 3.12 1 10 0 10 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+PRODUCT analytics 3.12 2 3 0 3 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+PRODUCT simulator 3.12 3 50 0 50 "" "" "" "" "" "" 0 0 0 0 0 0 0 0 0
+05/12/2013 00:30
+05/12/2013 01:01
+05/12/2013 01:31
+IN 1 datavis 3.01 terra ubuntu "" 1 1 0 c1 05/12 01:32:28
