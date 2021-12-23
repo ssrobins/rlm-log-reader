@@ -121,7 +121,11 @@ add_subdirectory (Test)
 # Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
 # Addition of MACOSX_BUNDLE in add_executable wraps the program in a .app package, which the user can double-click on to launch the program
 add_executable (${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles} ${QtResources} ${QtMockSources} ${QtUIFiles})
-target_link_libraries (${project_name} ${Boost_LIBRARIES} ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+target_link_libraries(${project_name}
+    CONAN_PKG::boost
+    ${QT_LIBRARIES}
+    ${QT_QTMAIN_LIBRARY}
+)
 
 
 enable_testing ()

@@ -28,10 +28,12 @@ configure_file (
   )
 
 
-include_directories(../gtest-1.6.0/include "${PROJECT_BINARY_DIR}")
+include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(${project_name} UnitTests.cpp IntegrationTests.cpp ../LogData.cpp ../Utilities.cpp TestConfig.h.in)
-target_link_libraries (${project_name} ${Boost_LIBRARIES} gtest gtest_main)
+target_link_libraries(${project_name}
+    CONAN_PKG::gtest
+)
 
 add_test(NAME ${project_name} COMMAND ${project_name})
 
