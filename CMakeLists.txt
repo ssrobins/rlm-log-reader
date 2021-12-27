@@ -70,6 +70,7 @@ if(conan_result)
 endif()
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
 
 set (VERSION_MAJOR 1)

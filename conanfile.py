@@ -4,7 +4,7 @@ class Conan(ConanFile):
     name = "RLMLogReader"
     version = ""
     settings = "os"
-    generators = "cmake"
+    generators = "cmake", "cmake_find_package", "cmake_paths"
 
     def requirements(self):
         self.requires("boost/1.78.0")
