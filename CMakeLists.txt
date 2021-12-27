@@ -37,7 +37,8 @@ else()
 endif()
 
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+    #set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13) # Minimum version of macOS supported by Qt 5
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14) # Minimum version of macOS supported by Qt 6
     set(conan_args -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 elseif(UNIX)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -60,7 +61,6 @@ if(CONAN_BUILD_MISSING_PKGS)
 endif()
 
 execute_process(
-    COMMAND conan remote add artifactory-ssrobins https://ssrobins.jfrog.io/artifactory/api/conan/conan --insert --force
     COMMAND conan remote add conancenter https://center.conan.io --insert --force
     COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_args}
     RESULT_VARIABLE conan_result
@@ -89,8 +89,10 @@ configure_file (
 find_package(Boost REQUIRED)
 
 # Qt
-#find_package (Qt4 REQUIRED)
-#include (${QT_USE_FILE})
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Source files
 set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
@@ -123,6 +125,7 @@ add_subdirectory (Test)
 add_executable (${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles} ${QtResources} ${QtMockSources} ${QtUIFiles})
 target_link_libraries(${project_name}
     CONAN_PKG::boost
+    CONAN_PKG::qt
     ${QT_LIBRARIES}
     ${QT_QTMAIN_LIBRARY}
 )
