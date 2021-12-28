@@ -36,8 +36,8 @@ else()
 endif()
 
 if(APPLE)
-    #set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13) # Minimum version of macOS supported by Qt 5
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14) # Minimum version of macOS supported by Qt 6
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13) # Minimum version of macOS supported by Qt 5
+    #set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14) # Minimum version of macOS supported by Qt 6
     set(conan_args -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 elseif(UNIX)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -49,7 +49,7 @@ elseif(UNIX)
     endif()
     set(conan_args -s compiler=${compiler} -s compiler.version=${compiler_version} -s compiler.libcxx=libstdc++11 -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 elseif(MSVC)
-    set(conan_args -s compiler.version=${compiler_version} -s compiler.runtime=MT -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+    set(conan_args -s arch=x86 -s compiler.version=${compiler_version} -s compiler.runtime=MT -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 else()
     message("Unhandled platform, Conan install command may fail")
 endif()
