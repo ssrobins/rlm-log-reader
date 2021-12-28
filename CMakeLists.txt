@@ -85,6 +85,14 @@ configure_file (
   "${PROJECT_BINARY_DIR}/MainWindowConfig.h"
   )
 
+if(MSVC)
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif()
+
 # Boost
 find_package(Boost REQUIRED)
 
