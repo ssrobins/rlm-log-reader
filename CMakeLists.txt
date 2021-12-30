@@ -37,8 +37,7 @@ endif()
 
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13) # Minimum version of macOS supported by Qt 5
-    #set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14) # Minimum version of macOS supported by Qt 6
-    set(conan_args -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+    set(conan_settings -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 elseif(UNIX)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         set(compiler clang)
@@ -47,9 +46,9 @@ elseif(UNIX)
     else()
         message("Unhandled compiler, ${CMAKE_CXX_COMPILER_ID}, Conan install command may fail")
     endif()
-    set(conan_args -s compiler=${compiler} -s compiler.version=${compiler_version} -s compiler.libcxx=libstdc++11 -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+    set(conan_settings -s compiler=${compiler} -s compiler.version=${compiler_version} -s compiler.libcxx=libstdc++11 -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 elseif(MSVC)
-    set(conan_args -s arch=x86 -s compiler.version=${compiler_version} -s compiler.runtime=MT -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+    set(conan_settings -s arch=x86 -s compiler.version=${compiler_version} -s compiler.runtime=MT -s compiler.cppstd=${CMAKE_CXX_STANDARD})
 else()
     message("Unhandled platform, Conan install command may fail")
 endif()
@@ -59,9 +58,37 @@ if(CONAN_BUILD_MISSING_PKGS)
     set(conan_build_option --build=missing)
 endif()
 
+set(conan_options
+    -o boost:without_chrono=True
+    -o boost:without_container=True
+    -o boost:without_context=True
+    -o boost:without_contract=True
+    -o boost:without_coroutine=True
+    -o boost:without_coroutine=True
+    -o boost:without_exception=True
+    -o boost:without_fiber=True
+    -o boost:without_graph=True
+    -o boost:without_iostreams=True
+    -o boost:without_json=True
+    -o boost:without_locale=True
+    -o boost:without_log=True
+    -o boost:without_math=True
+    -o boost:without_nowide=True
+    -o boost:without_program_options=True
+    -o boost:without_random=True
+    -o boost:without_regex=True
+    -o boost:without_serialization=True
+    -o boost:without_stacktrace=True
+    -o boost:without_test=True
+    -o boost:without_thread=True
+    -o boost:without_timer=True
+    -o boost:without_type_erasure=True
+    -o boost:without_wave=True
+)
+
 execute_process(
     COMMAND conan remote add conancenter https://center.conan.io --insert --force
-    COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_args}
+    COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_settings} ${conan_options}
     RESULT_VARIABLE conan_result
 )
 if(conan_result)
