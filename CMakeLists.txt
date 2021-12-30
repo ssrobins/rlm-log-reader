@@ -84,6 +84,47 @@ set(conan_options
     -o boost:without_timer=True
     -o boost:without_type_erasure=True
     -o boost:without_wave=True
+    -o qt:qt3d=False
+    -o qt:qtactiveqt=False
+    -o qt:qtandroidextras=False
+    -o qt:qtcharts=False
+    -o qt:qtconnectivity=False
+    -o qt:qtdatavis3d=False
+    -o qt:qtdeclarative=False
+    -o qt:qtdoc=False
+    -o qt:qtgamepad=False
+    -o qt:qtgraphicaleffects=False
+    -o qt:qtimageformats=False
+    -o qt:qtlocation=False
+    -o qt:qtlottie=False
+    -o qt:qtmacextras=False
+    -o qt:qtmultimedia=False
+    -o qt:qtnetworkauth=False
+    -o qt:qtpurchasing=False
+    -o qt:qtquick3d=False
+    -o qt:qtquickcontrols=False
+    -o qt:qtquickcontrols2=False
+    -o qt:qtquicktimeline=False
+    -o qt:qtremoteobjects=False
+    -o qt:qtscript=False
+    -o qt:qtscxml=False
+    -o qt:qtsensors=False
+    -o qt:qtserialbus=False
+    -o qt:qtserialport=False
+    -o qt:qtspeech=False
+    -o qt:qtsvg=False
+    -o qt:qttools=False
+    -o qt:qttranslations=False
+    -o qt:qtvirtualkeyboard=False
+    -o qt:qtwayland=False
+    -o qt:qtwebchannel=False
+    -o qt:qtwebengine=False
+    -o qt:qtwebglplugin=False
+    -o qt:qtwebsockets=False
+    -o qt:qtwebview=False
+    -o qt:qtwinextras=False
+    -o qt:qtx11extras=False
+    -o qt:qtxmlpatterns=False
 )
 
 execute_process(
