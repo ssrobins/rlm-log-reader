@@ -20,7 +20,9 @@
 #include <string>
 #include <vector>
 #include <QApplication>
+#include <QtPlugin>
 
+Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
 
 using namespace std;
 
