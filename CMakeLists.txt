@@ -134,8 +134,6 @@ add_executable (${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles
 target_link_libraries(${project_name}
     CONAN_PKG::boost
     CONAN_PKG::qt
-    #Qt5::Widgets
-    #Qt5::Gui
     ${QT_LIBRARIES}
     ${QT_QTMAIN_LIBRARY}
 )
@@ -151,40 +149,22 @@ add_custom_command (TARGET ${project_name}
 
 
 if (APPLE)
-    qt_import_plugins({project_name}
-        EXCLUDE Qt5::QCocoaIntegrationPlugin
-    )
 
-    target_sources(${project_name} PRIVATE
-        graphics/icon.icns
-    )
-    set_source_files_properties(graphics/icon.icns PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-    )
-    set_target_properties(${project_name} PROPERTIES
-        MACOSX_BUNDLE_ICON_FILE "icon.icns"
-    )
+    set (MACOSX_BUNDLE_ICON_FILE icon.icns)
 
-    #target_sources(${project_name} PRIVATE
-    #    qt.conf
-    #)
-    #set_source_files_properties(graphics/qt.conf PROPERTIES
-    #    MACOSX_PACKAGE_LOCATION Resources
-    #)
-
-    #add_custom_target( MacResources
-    #  COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources
+    add_custom_target( MacResources
+      COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources
       
       # Copies the icon file into the Mac OS X bundle
-    #  COMMAND cp ${PROJECT_SOURCE_DIR}/graphics/${MACOSX_BUNDLE_ICON_FILE}
-    #        ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/${MACOSX_BUNDLE_ICON_FILE}
+      COMMAND cp ${PROJECT_SOURCE_DIR}/graphics/${MACOSX_BUNDLE_ICON_FILE}
+            ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/${MACOSX_BUNDLE_ICON_FILE}
       
       # Copies the qt.conf file into the Mac OS X bundle to stop the application from crashing at startup
-    #  COMMAND cp ${PROJECT_SOURCE_DIR}/qt.conf
-    #        ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/qt.conf
-    #)
+      COMMAND cp ${PROJECT_SOURCE_DIR}/qt.conf
+            ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/qt.conf
+    )
 
-    #add_dependencies(${project_name} MacResources)
+    add_dependencies(${project_name} MacResources)
 
 endif (APPLE)
 
