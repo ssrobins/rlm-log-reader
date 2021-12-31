@@ -176,34 +176,19 @@ set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
 # Header files
 set (HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
 
-# Any header file with Qt's Q_OBJECT in it must be wrapped
-#QT4_WRAP_CPP(QtMockSources MainWindow.h)
-
-# Qt UI files
-#QT4_WRAP_UI(QtUIFiles MainWindow.ui)
-
-# Qt resources
-#QT4_ADD_RESOURCES(QtResources graphics.qrc)
-
 # Include the current binary directory so code that uses auto-generated ui headers can be built
 # Include the project binary directory so the MainWindowConfig.h file can be found
 include_directories(${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_BINARY_DIR}")
 
-# GTest
-#set (gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-#add_subdirectory (gtest-1.6.0)
 add_subdirectory (Test)
-#include_directories(gtest-1.6.0/include)
-
 
 # Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
 # Addition of MACOSX_BUNDLE in add_executable wraps the program in a .app package, which the user can double-click on to launch the program
-add_executable (${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles} ${QtResources} ${QtMockSources} ${QtUIFiles})
+add_executable(${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles})
+
 target_link_libraries(${project_name}
     CONAN_PKG::boost
     CONAN_PKG::qt
-    ${QT_LIBRARIES}
-    ${QT_QTMAIN_LIBRARY}
 )
 
 
