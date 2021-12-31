@@ -20,12 +20,15 @@
 #include <string>
 #include <vector>
 #include <QApplication>
+#include <QtPlugin>
 
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+    Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
+
     QApplication app(argc, argv);
 
     QIcon windowIcon;

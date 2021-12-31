@@ -191,6 +191,11 @@ target_link_libraries(${project_name}
     CONAN_PKG::qt
 )
 
+#qt_import_plugins(${project_name}
+#    INCLUDE Qt5::QCocoaIntegrationPlugin
+#    EXCLUDE Qt5::QMinimalIntegrationPlugin
+#)
+
 
 enable_testing ()
 
