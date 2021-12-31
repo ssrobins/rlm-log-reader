@@ -16,6 +16,7 @@
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtGui>
+#include <QMessageBox>
 
 #include "MainWindow.h"
 #include "LogData.h"
@@ -42,7 +43,7 @@ MainWindow::MainWindow(QMainWindow* parent)
     connect( this->ui.saveButton, SIGNAL( clicked() ), this, SLOT(saveButtonClicked()) );
     connect( this->ui.generateButton, SIGNAL( clicked() ), this, SLOT(generateButtonClicked()) );
 
-    QString settingsPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     m_settingsFile = settingsPath + "/" + appTitleNoSpaces.c_str() + ".ini";
     qDebug() << "Settings filepath: " << m_settingsFile;
 }

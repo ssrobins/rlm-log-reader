@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  CONAN_REVISIONS_ENABLED: 1
+  CONAN_SYSREQUIRES_MODE: enabled
+  app_name: RLMLogReader
+
+jobs:
+  builds:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux
+            os: ubuntu-18.04
+            build_script: ./cmake.py linux --build --test --package
+            artifact_path: build_linux/_package/*.tar.gz
+          - name: macos
+            os: macos-11
+            build_script: ./cmake.py macos --build --test --package
+            artifact_path: build_macos/_package/*.zip
+          - name:  windows
+            os: windows-2019
+            build_script: py cmake.py windows --build --test --package
+            artifact_path: build_windows/_package/*.zip
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Print environment variables
+        run: env
+
+      - name: Install required Linux packages
+        if: matrix.name == 'linux'
+        run: sudo apt-get install ninja-build python3-setuptools -y
+
+      - name: Import Code-Signing Certificates
+        if: matrix.name == 'macos'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.APPLE_CERTIFICATES }}
+          p12-password: ${{ secrets.APPLE_CERTIFICATES_PASSWORD }}
+
+      - name: Install CMake
+        uses: ssrobins/install-cmake@main
+
+      - name: Install Conan
+        run: pip3 install conan --upgrade
+
+      - name: Print versions
+        run: |
+          cmake --version
+          conan --version
+
+      - name: Build
+        run:  ${{ matrix.build_script }} --config Release
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.app_name }}_artifact${{ github.run_number }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error

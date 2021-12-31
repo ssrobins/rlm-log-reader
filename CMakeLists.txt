@@ -15,11 +15,130 @@
 # You should have received a copy of the GNU General Public License
 # along with RLM Log Reader.  If not, see <http:#www.gnu.org/licenses/>.
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required(VERSION 3.21)
 
 set (app_title "RLM Log Reader")
 set (project_name "RLMLogReader")
 project (${project_name})
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(APPLE)
+    string(REGEX MATCH "[0-9]+\.[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+elseif(MSVC)
+    string(REGEX MATCH "[0-9]+" compiler_version ${CMAKE_GENERATOR})
+else()
+    string(REGEX MATCH "[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND ${compiler_version} LESS 8)
+        string(REGEX MATCH "[0-9]+\.[0-9]+" compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+    endif()
+endif()
+
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13) # Minimum version of macOS supported by Qt 5
+    set(conan_settings -s os.version=${CMAKE_OSX_DEPLOYMENT_TARGET} -s compiler.version=${compiler_version} -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+elseif(UNIX)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(compiler clang)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set(compiler gcc)
+    else()
+        message("Unhandled compiler, ${CMAKE_CXX_COMPILER_ID}, Conan install command may fail")
+    endif()
+    set(conan_settings -s compiler=${compiler} -s compiler.version=${compiler_version} -s compiler.libcxx=libstdc++11 -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+elseif(MSVC)
+    set(conan_settings -s arch=x86 -s compiler.version=${compiler_version} -s compiler.runtime=MT -s compiler.cppstd=${CMAKE_CXX_STANDARD})
+else()
+    message("Unhandled platform, Conan install command may fail")
+endif()
+
+option(CONAN_BUILD_MISSING_PKGS "Build missing Conan packages" ON)
+if(CONAN_BUILD_MISSING_PKGS)
+    set(conan_build_option --build=missing)
+endif()
+
+set(conan_options
+    -o boost:without_chrono=True
+    -o boost:without_container=True
+    -o boost:without_context=True
+    -o boost:without_contract=True
+    -o boost:without_coroutine=True
+    -o boost:without_coroutine=True
+    -o boost:without_exception=True
+    -o boost:without_fiber=True
+    -o boost:without_graph=True
+    -o boost:without_iostreams=True
+    -o boost:without_json=True
+    -o boost:without_locale=True
+    -o boost:without_log=True
+    -o boost:without_math=True
+    -o boost:without_nowide=True
+    -o boost:without_program_options=True
+    -o boost:without_random=True
+    -o boost:without_regex=True
+    -o boost:without_serialization=True
+    -o boost:without_stacktrace=True
+    -o boost:without_test=True
+    -o boost:without_thread=True
+    -o boost:without_timer=True
+    -o boost:without_type_erasure=True
+    -o boost:without_wave=True
+    -o qt:qt3d=False
+    -o qt:qtactiveqt=False
+    -o qt:qtandroidextras=False
+    -o qt:qtcharts=False
+    -o qt:qtconnectivity=False
+    -o qt:qtdatavis3d=False
+    -o qt:qtdeclarative=False
+    -o qt:qtdoc=False
+    -o qt:qtgamepad=False
+    -o qt:qtgraphicaleffects=False
+    -o qt:qtimageformats=False
+    -o qt:qtlocation=False
+    -o qt:qtlottie=False
+    -o qt:qtmacextras=False
+    -o qt:qtmultimedia=False
+    -o qt:qtnetworkauth=False
+    -o qt:qtpurchasing=False
+    -o qt:qtquick3d=False
+    -o qt:qtquickcontrols=False
+    -o qt:qtquickcontrols2=False
+    -o qt:qtquicktimeline=False
+    -o qt:qtremoteobjects=False
+    -o qt:qtscript=False
+    -o qt:qtscxml=False
+    -o qt:qtsensors=False
+    -o qt:qtserialbus=False
+    -o qt:qtserialport=False
+    -o qt:qtspeech=False
+    -o qt:qtsvg=False
+    -o qt:qttools=False
+    -o qt:qttranslations=False
+    -o qt:qtvirtualkeyboard=False
+    -o qt:qtwayland=False
+    -o qt:qtwebchannel=False
+    -o qt:qtwebengine=False
+    -o qt:qtwebglplugin=False
+    -o qt:qtwebsockets=False
+    -o qt:qtwebview=False
+    -o qt:qtwinextras=False
+    -o qt:qtx11extras=False
+    -o qt:qtxmlpatterns=False
+)
+
+execute_process(
+    COMMAND conan remote add conancenter https://center.conan.io --insert --force
+    COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_settings} ${conan_options}
+    RESULT_VARIABLE conan_result
+)
+if(conan_result)
+    message(FATAL_ERROR "Conan error")
+endif()
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
 
 set (VERSION_MAJOR 1)
 set (VERSION_MINOR 1)
@@ -34,16 +153,22 @@ configure_file (
   "${PROJECT_BINARY_DIR}/MainWindowConfig.h"
   )
 
+if(MSVC)
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif()
+
 # Boost
-set (Boost_USE_STATIC_LIBS ON)
-set (Boost_USE_MULTITHREADED ON)
-set (Boost_USE_STATIC_RUNTIME OFF)
-find_package (Boost COMPONENTS date_time system filesystem REQUIRED)
-include_directories (${Boost_INCLUDE_DIRS})
+find_package(Boost REQUIRED)
 
 # Qt
-find_package (Qt4 REQUIRED)
-include (${QT_USE_FILE})
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Source files
 set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
@@ -51,30 +176,20 @@ set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
 # Header files
 set (HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
 
-# Any header file with Qt's Q_OBJECT in it must be wrapped
-QT4_WRAP_CPP(QtMockSources MainWindow.h)
-
-# Qt UI files
-QT4_WRAP_UI(QtUIFiles MainWindow.ui)
-
-# Qt resources
-QT4_ADD_RESOURCES(QtResources graphics.qrc)
-
 # Include the current binary directory so code that uses auto-generated ui headers can be built
 # Include the project binary directory so the MainWindowConfig.h file can be found
 include_directories(${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_BINARY_DIR}")
 
-# GTest
-set (gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-add_subdirectory (gtest-1.6.0)
 add_subdirectory (Test)
-include_directories(gtest-1.6.0/include)
-
 
 # Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
 # Addition of MACOSX_BUNDLE in add_executable wraps the program in a .app package, which the user can double-click on to launch the program
-add_executable (${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles} ${QtResources} ${QtMockSources} ${QtUIFiles})
-target_link_libraries (${project_name} ${Boost_LIBRARIES} ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+add_executable(${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles})
+
+target_link_libraries(${project_name}
+    CONAN_PKG::boost
+    CONAN_PKG::qt
+)
 
 
 enable_testing ()

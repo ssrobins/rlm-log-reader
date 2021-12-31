@@ -1,0 +1,49 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "cmakeExecutable": "cmake.exe"
+        },
+        {
+            "name": "linux",
+            "inherits": "default",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build_${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos",
+            "inherits": "default",
+            "generator": "Xcode",
+            "binaryDir": "${sourceDir}/build_${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "windows",
+            "inherits": "default",
+            "generator": "Visual Studio 16 2019",
+            "architecture": "Win32",
+            "binaryDir": "${sourceDir}/build_${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        }
+    ]
+}
