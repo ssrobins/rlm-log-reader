@@ -19,15 +19,20 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <QApplication>
 #include <QtPlugin>
+#include <QApplication>
 
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+#if defined(Q_OS_WIN)
     Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
+#elif defined(Q_OS_MAC)
+    Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
+#elif defined(Q_OS_LINUX)
+#endif
 
     QApplication app(argc, argv);
 
