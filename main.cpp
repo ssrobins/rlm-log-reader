@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 #elif defined(Q_OS_MAC)
     Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
 #elif defined(Q_OS_LINUX)
+    Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 #endif
 
     QApplication app(argc, argv);
