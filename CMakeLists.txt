@@ -191,11 +191,14 @@ target_link_libraries(${project_name}
     CONAN_PKG::qt
 )
 
-#qt_import_plugins(${project_name}
-#    INCLUDE Qt5::QCocoaIntegrationPlugin
-#    EXCLUDE Qt5::QMinimalIntegrationPlugin
-#)
-
+if(MSVC)
+    target_link_libraries(${project_name}
+        ${CONAN_QT_ROOT}/lib/Qt5EventDispatcherSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/Qt5FontDatabaseSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/Qt5ThemeSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/Qt5WindowsUIAutomationSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+endif()
 
 enable_testing ()
 

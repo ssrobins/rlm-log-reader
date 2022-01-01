@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
+    Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 
     QApplication app(argc, argv);
 
