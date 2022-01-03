@@ -191,6 +191,65 @@ target_link_libraries(${project_name}
     CONAN_PKG::qt
 )
 
+if(APPLE)
+    target_link_libraries(Qt5::QCocoaIntegrationPlugin
+    INTERFACE
+        cups
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5AccessibilitySupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ClipboardSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5FontDatabaseSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5GraphicsSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ThemeSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+
+    target_link_libraries(${project_name}
+        Qt5::QCocoaIntegrationPlugin
+    )
+elseif(WIN32)
+    target_link_libraries(Qt5::QWindowsIntegrationPlugin
+    INTERFACE
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5EventDispatcherSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5FontDatabaseSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ThemeSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5WindowsUIAutomationSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+
+    target_link_libraries(${project_name}
+        Qt5::QWindowsIntegrationPlugin
+    )
+elseif(UNIX)
+    add_library(Qt5::FontDatabaseSupport STATIC IMPORTED)
+    set_target_properties(Qt5::FontDatabaseSupport PROPERTIES
+        IMPORTED_LOCATION ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5FontDatabaseSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+    target_link_libraries(Qt5::FontDatabaseSupport
+    INTERFACE
+        CONAN_PKG::fontconfig
+        CONAN_PKG::freetype
+    )
+
+    add_library(Qt5::ServiceSupport STATIC IMPORTED)
+    set_target_properties(Qt5::ServiceSupport PROPERTIES
+        IMPORTED_LOCATION ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ServiceSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+    target_link_libraries(Qt5::ServiceSupport
+    INTERFACE
+        Qt5::Core
+    )
+
+    target_link_libraries(Qt5::QXcbIntegrationPlugin
+    INTERFACE
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5EdidSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        Qt5::FontDatabaseSupport
+        Qt5::ServiceSupport
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ThemeSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5XkbCommonSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+
+    target_link_libraries(${project_name}
+        Qt5::QXcbIntegrationPlugin
+    )
+endif()
 
 enable_testing ()
 
