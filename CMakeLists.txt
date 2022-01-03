@@ -323,11 +323,5 @@ set (CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
 set (CPACK_PACKAGE_VERSION_PATCH "0")
 set (CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
 set (CPACK_PACKAGE_FILE_NAME "${project_name}_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}_${platform}${bitness}")
-set (CPACK_SOURCE_PACKAGE_FILE_NAME "${project_name}_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}_source")
-set (CPACK_SOURCE_IGNORE_FILES "/.git/;.gitignore;/ExtraTestFiles/")
 
-# Make a custom target for building the source package so it can easily be run on Windows
-add_custom_target(PACKAGE_SOURCE
-                  COMMAND cpack --config ${PROJECT_BINARY_DIR}/CPackSourceConfig.cmake
-                  )
 include (CPack)
