@@ -281,10 +281,6 @@ endif (APPLE)
 
 set (install_dir "${project_name}")
 
-# Install the C++ runtime libraries
-set (CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${install_dir})
-include (InstallRequiredSystemLibraries)
-
 install (TARGETS ${project_name} DESTINATION ${install_dir})
 
 # Install documentation and sample log files
