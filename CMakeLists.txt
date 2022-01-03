@@ -160,17 +160,28 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
-# Source files
-set(SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
+add_library(Data STATIC)
 
-# Header files
-set(HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
+target_sources(Data PRIVATE
+    Exceptions.h
+    LogData.cpp
+    LogData.h
+    Utilities.cpp
+)
 
-add_subdirectory(Test)
+target_link_libraries(Data
+    CONAN_PKG::boost
+)
 
-# Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
-# Addition of MACOSX_BUNDLE in add_executable wraps the program in a .app package, which the user can double-click on to launch the program
-add_executable(${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles})
+add_executable(${project_name} WIN32 MACOSX_BUNDLE)
+
+target_sources(${project_name} PRIVATE
+    icon.rc
+    main.cpp
+    MainWindow.cpp
+    MainWindow.h
+    MainWindowConfig.h.in
+)
 
 # Configure a header file to pass the app name and version to the source code
 configure_file(
@@ -183,9 +194,11 @@ target_include_directories(${project_name} PRIVATE
 )
 
 target_link_libraries(${project_name}
-    CONAN_PKG::boost
     CONAN_PKG::qt
+    Data
 )
+
+add_subdirectory(Test)
 
 if(APPLE)
     target_link_libraries(Qt5::QCocoaIntegrationPlugin

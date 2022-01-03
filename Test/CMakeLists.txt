@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with RLM Log Reader.  If not, see <http:#www.gnu.org/licenses/>.
 
-add_executable(RLMLogReaderTest
+add_executable(RLMLogReaderTest)
+
+target_sources(RLMLogReaderTest PRIVATE
     UnitTests.cpp
     IntegrationTests.cpp
-    ../LogData.cpp
-    ../Utilities.cpp
     TestConfig.h.in
 )
 
@@ -37,6 +37,7 @@ target_include_directories(RLMLogReaderTest PRIVATE
 target_link_libraries(RLMLogReaderTest
     CONAN_PKG::boost
     CONAN_PKG::gtest
+    Data
 )
 
 add_test(NAME RLMLogReaderTest COMMAND RLMLogReaderTest)
