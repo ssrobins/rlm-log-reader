@@ -320,16 +320,6 @@ else ()
     set (platform "Linux")
 endif ()
 
-# Leading backslash is required, which keeps ${CMAKE_INSTALL_PREFIX} from being converted to its variable value.
-# Otherwise, the Qt libraries don't get copied into the package in the fixup_bundle command.
-# No idea why!
-set (APPS "\${CMAKE_INSTALL_PREFIX}/${install_dir}/${executable_name}")  # paths to executables
-set (DIRS ${QT_LIBRARY_DIR})   # directories to search for prerequisites
-install (CODE "
-   include(BundleUtilities)
-   fixup_bundle(\"${APPS}\"   \"\"   \"${DIRS}\")
-   " COMPONENT Runtime)
-
 
 # Settings for the installation package
 set (CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
