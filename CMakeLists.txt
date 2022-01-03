@@ -192,14 +192,18 @@ target_link_libraries(${project_name}
 )
 
 if(APPLE)
-    target_link_libraries(${project_name}
+    target_link_libraries(Qt5::QCocoaIntegrationPlugin
+    INTERFACE
+        cups
         ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5AccessibilitySupport${CMAKE_STATIC_LIBRARY_SUFFIX}
         ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ClipboardSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
         ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5FontDatabaseSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
         ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5GraphicsSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
-        ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5PrintSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
         ${CONAN_QT_ROOT}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}Qt5ThemeSupport${CMAKE_STATIC_LIBRARY_SUFFIX}
-        cups
+    )
+
+    target_link_libraries(${project_name}
+        Qt5::QCocoaIntegrationPlugin
     )
 elseif(WIN32)
     target_link_libraries(${project_name}
