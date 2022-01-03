@@ -270,10 +270,6 @@ if (APPLE)
       # Copies the icon file into the Mac OS X bundle
       COMMAND cp ${PROJECT_SOURCE_DIR}/graphics/${MACOSX_BUNDLE_ICON_FILE}
             ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/${MACOSX_BUNDLE_ICON_FILE}
-      
-      # Copies the qt.conf file into the Mac OS X bundle to stop the application from crashing at startup
-      COMMAND cp ${PROJECT_SOURCE_DIR}/qt.conf
-            ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/qt.conf
     )
 
     add_dependencies(${project_name} MacResources)
