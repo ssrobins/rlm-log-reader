@@ -15,36 +15,40 @@
 # You should have received a copy of the GNU General Public License
 # along with RLM Log Reader.  If not, see <http:#www.gnu.org/licenses/>.
 
-cmake_minimum_required (VERSION 2.6)
+add_executable(RLMLogReaderTest)
 
-set (project_name "RLMLogReaderTest")
-project (${project_name})
+target_sources(RLMLogReaderTest PRIVATE
+    UnitTests.cpp
+    IntegrationTests.cpp
+    TestConfig.h.in
+)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/TestConfig.h.in"
-  "${PROJECT_BINARY_DIR}/TestConfig.h"
-  )
-
-
-include_directories("${PROJECT_BINARY_DIR}")
-
-add_executable(${project_name} UnitTests.cpp IntegrationTests.cpp ../LogData.cpp ../Utilities.cpp TestConfig.h.in)
-target_link_libraries(${project_name}
-    CONAN_PKG::boost
-    CONAN_PKG::gtest
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/TestConfig.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/TestConfig.h"
 )
 
-add_test(NAME ${project_name} COMMAND ${project_name})
+target_include_directories(RLMLogReaderTest PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+target_link_libraries(RLMLogReaderTest
+    CONAN_PKG::boost
+    CONAN_PKG::gtest
+    Data
+)
+
+add_test(NAME RLMLogReaderTest COMMAND RLMLogReaderTest)
 
 # Remove and remake the test results directory so old test results don't cause false positives
-add_custom_command (TARGET ${project_name}
-                    PRE_BUILD
-                    COMMAND cmake -E remove_directory \"${PROJECT_BINARY_DIR}/TestResults\"
-                    COMMAND cmake -E make_directory \"${PROJECT_BINARY_DIR}/TestResults\")
+add_custom_command(TARGET RLMLogReaderTest
+                   PRE_BUILD
+                   COMMAND cmake -E remove_directory \"${CMAKE_CURRENT_BINARY_DIR}/TestResults\"
+                   COMMAND cmake -E make_directory \"${CMAKE_CURRENT_BINARY_DIR}/TestResults\")
 
 # Run unit tests after the build
-add_custom_command (TARGET ${project_name}
-                    POST_BUILD
-                    COMMAND ${project_name})
+add_custom_command(TARGET RLMLogReaderTest
+                   POST_BUILD
+                   COMMAND RLMLogReaderTest)
