@@ -169,6 +169,10 @@ target_sources(Data PRIVATE
     Utilities.cpp
 )
 
+target_include_directories(Data PUBLIC
+    .
+)
+
 target_link_libraries(Data
     CONAN_PKG::boost
 )

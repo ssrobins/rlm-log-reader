@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "../LogData.h"
+#include "LogData.h"
 #include "gtest/gtest.h"
 #include "TestConfig.h"
-#include "../Utilities.h"
+#include "Utilities.h"
 #include <boost/date_time/gregorian/gregorian.hpp>
 
 
