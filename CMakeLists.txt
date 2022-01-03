@@ -17,9 +17,9 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-set (app_title "RLM Log Reader")
-set (project_name "RLMLogReader")
-project (${project_name})
+set(app_title "RLM Log Reader")
+set(project_name "RLMLogReader")
+project(${project_name} VERSION 1.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -140,18 +140,8 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
 
-set (VERSION_MAJOR 1)
-set (VERSION_MINOR 1)
-set (VERSION_PATCH 0)
-
-set (CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/_install")
-set (CPACK_PACKAGE_DIRECTORY "${PROJECT_BINARY_DIR}/_package")
-
-# Configure a header file to pass the app name and version to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/MainWindowConfig.h.in"
-  "${PROJECT_BINARY_DIR}/MainWindowConfig.h"
-  )
+set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/_install")
+set(CPACK_PACKAGE_DIRECTORY "${PROJECT_BINARY_DIR}/_package")
 
 if(MSVC)
     add_compile_options(
@@ -171,20 +161,26 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 # Source files
-set (SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
+set(SourceFiles main.cpp icon.rc MainWindow.cpp LogData.cpp Utilities.cpp)
 
 # Header files
-set (HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
+set(HeaderFiles LogData.h MainWindow.h MainWindowConfig.h.in Exceptions.h Utilities.h)
 
-# Include the current binary directory so code that uses auto-generated ui headers can be built
-# Include the project binary directory so the MainWindowConfig.h file can be found
-include_directories(${CMAKE_CURRENT_BINARY_DIR} "${PROJECT_BINARY_DIR}")
-
-add_subdirectory (Test)
+add_subdirectory(Test)
 
 # Combination of WIN32 in add_executable and ${QT_QTMAIN_LIBRARY} in target_link_libraries allows the application to run on Windows without displaying the command prompt
 # Addition of MACOSX_BUNDLE in add_executable wraps the program in a .app package, which the user can double-click on to launch the program
 add_executable(${project_name} WIN32 MACOSX_BUNDLE ${SourceFiles} ${HeaderFiles})
+
+# Configure a header file to pass the app name and version to the source code
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/MainWindowConfig.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/MainWindowConfig.h"
+)
+
+target_include_directories(${project_name} PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 target_link_libraries(${project_name}
     CONAN_PKG::boost
@@ -251,16 +247,16 @@ elseif(UNIX)
     )
 endif()
 
-enable_testing ()
+enable_testing()
 
 # Remove and remake the test results directory so old test results don't cause false positives
-add_custom_command (TARGET ${project_name}
-                    PRE_BUILD
-                    COMMAND cmake -E remove_directory \"${CMAKE_INSTALL_PREFIX}\"
-                    COMMAND cmake -E remove_directory \"${CPACK_PACKAGE_DIRECTORY}\")
+add_custom_command(TARGET ${project_name}
+                   PRE_BUILD
+                   COMMAND cmake -E remove_directory \"${CMAKE_INSTALL_PREFIX}\"
+                   COMMAND cmake -E remove_directory \"${CPACK_PACKAGE_DIRECTORY}\")
 
 
-if (APPLE)
+if(APPLE)
 
     set (MACOSX_BUNDLE_ICON_FILE icon.icns)
 
@@ -268,56 +264,53 @@ if (APPLE)
       COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources
       
       # Copies the icon file into the Mac OS X bundle
-      COMMAND cp ${PROJECT_SOURCE_DIR}/graphics/${MACOSX_BUNDLE_ICON_FILE}
+      COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/graphics/${MACOSX_BUNDLE_ICON_FILE}
             ${CMAKE_CURRENT_BINARY_DIR}/${project_name}.app/Contents/Resources/${MACOSX_BUNDLE_ICON_FILE}
     )
 
     add_dependencies(${project_name} MacResources)
 
-endif (APPLE)
+endif()
 
 
 # Set up installation
 
-set (install_dir "${project_name}")
+set(install_dir "${project_name}")
 
-install (TARGETS ${project_name} DESTINATION ${install_dir})
+install(TARGETS ${project_name} DESTINATION ${install_dir})
 
 # Install documentation and sample log files
-install (FILES
+install(FILES
     COPYING.html
     README.html
     Test/TestFiles/SampleLog_Report.log
     Test/TestFiles/SampleLog_ISV.log
     DESTINATION ${install_dir})
 
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set (bitness "64")
-else ()
-    set (bitness "32")
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(bitness "64")
+else()
+    set(bitness "32")
 endif()
 
-if (WIN32)
-    set (executable_name "${project_name}.exe")
-    set (CPACK_GENERATOR "ZIP")
-    set (platform "Windows")
-    set (bitness "") # The build works on 32-bit and 64-bit so we can remove the "bitness" label for Windows
-elseif (APPLE)
-    set (executable_name "${project_name}.app")
-    set (CPACK_GENERATOR "ZIP")
-    set (platform "Mac")
-else ()
-    set (executable_name "${project_name}")
-    set (CPACK_GENERATOR "TGZ")
-    set (platform "Linux")
-endif ()
+if(WIN32)
+    set(executable_name "${project_name}.exe")
+    set(CPACK_GENERATOR "ZIP")
+    set(platform "Windows")
+    set(bitness "") # The build works on 32-bit and 64-bit so we can remove the "bitness" label for Windows
+elseif(APPLE)
+    set(executable_name "${project_name}.app")
+    set(CPACK_GENERATOR "ZIP")
+    set(platform "Mac")
+else()
+    set(executable_name "${project_name}")
+    set(CPACK_GENERATOR "TGZ")
+    set(platform "Linux")
+endif()
 
 
 # Settings for the installation package
-set (CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
-set (CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
-set (CPACK_PACKAGE_VERSION_PATCH "0")
-set (CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
-set (CPACK_PACKAGE_FILE_NAME "${project_name}_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}_${platform}${bitness}")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
+set(CPACK_PACKAGE_FILE_NAME "${project_name}_${PROJECT_VERSION}_${platform}${bitness}")
 
-include (CPack)
+include(CPack)
