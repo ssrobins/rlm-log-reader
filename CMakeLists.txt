@@ -128,7 +128,7 @@ set(conan_options
 )
 
 execute_process(
-    COMMAND conan remote add conancenter https://center.conan.io --insert --force
+    COMMAND conan remote add artifactory-ssrobins https://ssrobins.jfrog.io/artifactory/api/conan/conan --insert --force
     COMMAND conan install --install-folder ${CMAKE_BINARY_DIR} --update ${CMAKE_SOURCE_DIR} ${conan_build_option} ${conan_settings} ${conan_options}
     RESULT_VARIABLE conan_result
 )
