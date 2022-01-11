@@ -23,15 +23,15 @@ jobs:
         include:
           - name: linux
             os: ubuntu-18.04
-            build_script: ./cmake.py linux --build --test --package
+            build_script: ./cmake.py linux
             artifact_path: build_linux/_package/*.tar.gz
           - name: macos
             os: macos-11
-            build_script: ./cmake.py macos --build --test --package
+            build_script: ./cmake.py macos
             artifact_path: build_macos/_package/*.zip
           - name:  windows
             os: windows-2019
-            build_script: py cmake.py windows --build --test --package
+            build_script: py cmake.py windows
             artifact_path: build_windows/_package/*.zip
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
           conan --version
 
       - name: Build
-        run:  ${{ matrix.build_script }} --config Release
+        run:  ${{ matrix.build_script }} --noConanPkgBuild --build --test --package --config Release
         env:
           DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
 
