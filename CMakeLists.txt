@@ -19,7 +19,7 @@ cmake_minimum_required(VERSION 3.21)
 
 set(app_title "RLM Log Reader")
 set(project_name "RLMLogReader")
-project(${project_name} VERSION 1.1.0)
+project(${project_name} VERSION 1.1.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
