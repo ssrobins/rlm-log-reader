@@ -23,8 +23,6 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
 
 
 void loadDataFromFile(const string& filePath, vector<string>& fileData);
@@ -54,10 +52,10 @@ string getFilenameFromFilepath(const string& filepath);
 
 std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString);
 
-ptime stringToBoostTime(string& dateString,
+boost::posix_time::ptime stringToBoostTime(string& dateString,
                         string& timeString);
 
-string boostTimeToString(ptime& dateTime);
+string boostTimeToString(boost::posix_time::ptime& dateTime);
 
 template <typename T>
 string toString(T& value)

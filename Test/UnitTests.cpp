@@ -22,9 +22,6 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-using namespace boost::posix_time;
-using namespace boost::gregorian;
-
 
 void lineBreakTests(vector<string>& rawData)
 {
@@ -188,7 +185,7 @@ TEST(stringToBoostTime, HoursMinutesSeconds)
 {
     string dateString = "05/11/2012";
     string timeString = "17:34:48";
-    ptime dateTime = stringToBoostTime(dateString, timeString);
+    boost::posix_time::ptime dateTime = stringToBoostTime(dateString, timeString);
 
     EXPECT_EQ("2012-May-11 17:34:48" , toString(dateTime));
 }
@@ -198,7 +195,7 @@ TEST(stringToBoostTime, HoursMinutes)
 {
     string dateString = "05/11/2012";
     string timeString = "17:34";
-    ptime dateTime = stringToBoostTime(dateString, timeString);
+    boost::posix_time::ptime dateTime = stringToBoostTime(dateString, timeString);
 
     EXPECT_EQ("2012-May-11 17:34:00", toString(dateTime));
 }

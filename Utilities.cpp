@@ -27,7 +27,6 @@
 #include <boost/filesystem/path.hpp>
 
 using namespace std;
-using namespace boost::filesystem;
 
 void loadDataFromFile(const string& filePath, vector<string>& fileData)
 {
@@ -221,10 +220,10 @@ std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& da
     return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
-ptime stringToBoostTime(string& dateString,
+boost::posix_time::ptime stringToBoostTime(string& dateString,
                         string& timeString)
 {
-    date boostDate(from_us_string(dateString));
+    boost::gregorian::date boostDate(boost::gregorian::from_us_string(dateString));
 
     vector<string> timeVector;
     tokenizeString(":", timeString, timeVector);
@@ -241,7 +240,7 @@ ptime stringToBoostTime(string& dateString,
         intSeconds = atoi(timeVector.at(2).c_str());
     }
 
-    ptime dateTime(boostDate, hours(intHours)+minutes(intMinutes)+seconds(intSeconds));
+    boost::posix_time::ptime dateTime(boostDate, boost::posix_time::hours(intHours)+boost::posix_time::minutes(intMinutes)+boost::posix_time::seconds(intSeconds));
     
     return dateTime;
 }
@@ -264,12 +263,12 @@ void parseDataInto2DVector(const vector<string>& rowData,
 
 void getFileListInDirectory(const string& directory, vector<string>& fileList)
 {
-    if (is_directory(directory))
+    if (boost::filesystem::is_directory(directory))
     {
         string filePath;
-        directory_iterator end;
+        boost::filesystem::directory_iterator end;
 
-        for(directory_iterator iter(directory); iter != end; ++iter)
+        for(boost::filesystem::directory_iterator iter(directory); iter != end; ++iter)
         {
             if (! is_directory( *iter ) )
             {

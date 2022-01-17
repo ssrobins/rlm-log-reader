@@ -735,10 +735,10 @@ void LogData::getUsageDuration()
     // Initialize matrix for total duration by user and product
     for (size_t row=0; row < m_uniqueUsers.size(); ++row)
     {
-        vector<time_duration> tempDurationVector;
+        vector<boost::posix_time::time_duration> tempDurationVector;
         for (size_t col=0; col < m_uniqueProducts.size(); ++col)
         {
-            time_duration td = seconds(0);
+            boost::posix_time::time_duration td = boost::posix_time::seconds(0);
             tempDurationVector.push_back(td);
         }
         m_totalDuration.push_back(tempDurationVector);
@@ -752,9 +752,9 @@ void LogData::getUsageDuration()
             string handle = m_eventData.at(row).at(IndexHandle);
             string product = m_eventData.at(row).at(IndexProduct);
             string userName = m_eventData.at(row).at(IndexUser);
-            ptime startTime = stringToBoostTime(m_eventData.at(row).at(IndexDate),
+            boost::posix_time::ptime startTime = stringToBoostTime(m_eventData.at(row).at(IndexDate),
                                                 m_eventData.at(row).at(IndexTime));
-            ptime endTime;
+            boost::posix_time::ptime endTime;
 
             for(size_t newRow=row+1; newRow < m_eventData.size(); ++newRow)
             {
@@ -784,7 +784,7 @@ void LogData::getUsageDuration()
                 endTime = stringToBoostTime(m_eventData.at(m_endTimeRow).at(IndexDate),
                                             m_eventData.at(m_endTimeRow).at(IndexTime));
             }
-            time_duration usageDuration = endTime - startTime;
+            boost::posix_time::time_duration usageDuration = endTime - startTime;
             m_totalDuration.at(getIndex(userName, m_uniqueUsers)).at(getIndex(product, m_uniqueProducts)) += usageDuration;
             string usageDurationString = toString(usageDuration);
             
@@ -907,7 +907,7 @@ void LogData::writeTotalDuration(const string& outputFilePath)
 
         for (size_t row=0; row < m_uniqueUsers.size(); ++row)
         {
-            vector<time_duration> tempDurationVector;
+            vector<boost::posix_time::time_duration> tempDurationVector;
             myfile << m_uniqueUsers.at(row) << ",";
             
             size_t columnSize = m_uniqueProducts.size();
