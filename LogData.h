@@ -119,7 +119,7 @@ class LogData
 
         vector< vector<string> > m_usage;
         vector< vector<string> > m_usageDuration;
-        vector< vector<boost::posix_time::time_duration> > m_totalDuration;
+        vector< vector<std::chrono::nanoseconds> > m_totalDuration;
 
         size_t m_endTimeRow;
 };
