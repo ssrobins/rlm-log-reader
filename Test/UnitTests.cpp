@@ -164,6 +164,26 @@ TEST(getUniqueItems, NewItemIsUnique)
 }
 
 
+TEST(stringToTime, HoursMinutesSeconds)
+{
+    string dateString = "05/11/2012";
+    string timeString = "17:34:48";
+    std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
+
+    EXPECT_EQ(1336786488, std::chrono::system_clock::to_time_t(datetime));
+}
+
+
+TEST(stringToTime, HoursMinutes)
+{
+    string dateString = "05/11/2012";
+    string timeString = "17:34";
+    std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
+
+    EXPECT_EQ(1336786440, std::chrono::system_clock::to_time_t(datetime));
+}
+
+
 TEST(stringToBoostTime, HoursMinutesSeconds)
 {
     string dateString = "05/11/2012";

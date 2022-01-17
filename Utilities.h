@@ -52,6 +52,8 @@ void setMatrixToZero(vector< vector<size_t> >& matrix);
 
 string getFilenameFromFilepath(const string& filepath);
 
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString);
+
 ptime stringToBoostTime(string& dateString,
                         string& timeString);
 

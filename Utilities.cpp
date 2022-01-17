@@ -212,6 +212,14 @@ string getFilenameFromFilepath(const string& filepath)
     return filename;
 }
 
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString)
+{
+    std::tm tm = {};
+    const std::string datetime = dateString + " " + timeString;
+    std::stringstream ss(datetime);
+    ss >> std::get_time(&tm, "%D %H:%M:%S");
+    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+}
 
 ptime stringToBoostTime(string& dateString,
                         string& timeString)

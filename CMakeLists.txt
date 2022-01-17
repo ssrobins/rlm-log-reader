@@ -167,6 +167,7 @@ target_sources(Data PRIVATE
     LogData.cpp
     LogData.h
     Utilities.cpp
+    Utilities.h
 )
 
 target_include_directories(Data PUBLIC
