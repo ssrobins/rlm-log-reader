@@ -35,7 +35,6 @@ target_include_directories(RLMLogReaderTest PRIVATE
 )
 
 target_link_libraries(RLMLogReaderTest
-    CONAN_PKG::boost
     CONAN_PKG::gtest
     Data
 )
