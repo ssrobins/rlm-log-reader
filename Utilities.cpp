@@ -220,6 +220,32 @@ std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& da
     return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
+std::string durationToHHMMSS(std::chrono::nanoseconds duration)
+{
+    auto hours = std::chrono::duration_cast<std::chrono::hours>(duration);
+    std::stringstream durationHoursStream;
+    durationHoursStream << std::setw(2) << std::setfill('0') << hours.count();
+    std::string durationHours = durationHoursStream.str();
+
+    duration -= hours;
+
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    std::stringstream durationMinutesStream;
+    durationMinutesStream << std::setw(2) << std::setfill('0') << minutes.count();
+    std::string durationMinutes = durationMinutesStream.str();
+
+    duration -= minutes;
+
+    std::stringstream durationSecondsStream;
+    durationSecondsStream << std::setw(2) << std::setfill('0') << std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+    std::string durationSeconds = durationSecondsStream.str();
+
+    std::stringstream durationStream;
+    durationStream << durationHours << ":" << durationMinutes << ":" << durationSeconds;
+
+    return durationStream.str();
+}
+
 boost::posix_time::ptime stringToBoostTime(string& dateString,
                         string& timeString)
 {

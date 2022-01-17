@@ -161,6 +161,30 @@ TEST(getUniqueItems, NewItemIsUnique)
 }
 
 
+TEST(durationToHHMMSS, OneSecond)
+{
+    auto duration = 1s;
+
+    EXPECT_EQ("00:00:01", durationToHHMMSS(duration));
+}
+
+
+TEST(durationToHHMMSS, OneMinute)
+{
+    auto duration = 60s;
+
+    EXPECT_EQ("00:01:00", durationToHHMMSS(duration));
+}
+
+
+TEST(durationToHHMMSS, OneHour)
+{
+    auto duration = 3600s;
+
+    EXPECT_EQ("01:00:00", durationToHHMMSS(duration));
+}
+
+
 TEST(stringToTime, HoursMinutesSeconds)
 {
     string dateString = "05/11/2012";

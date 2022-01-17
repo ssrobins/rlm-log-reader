@@ -55,6 +55,8 @@ std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& da
 boost::posix_time::ptime stringToBoostTime(string& dateString,
                         string& timeString);
 
+std::string durationToHHMMSS(std::chrono::nanoseconds duration);
+
 string boostTimeToString(boost::posix_time::ptime& dateTime);
 
 template <typename T>
