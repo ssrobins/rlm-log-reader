@@ -19,8 +19,6 @@
 #include "Utilities.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 
 void lineBreakTests(vector<string>& rawData)
@@ -204,25 +202,6 @@ TEST(stringToTime, HoursMinutes)
     EXPECT_EQ(1336786440, std::chrono::system_clock::to_time_t(datetime));
 }
 
-
-TEST(stringToBoostTime, HoursMinutesSeconds)
-{
-    string dateString = "05/11/2012";
-    string timeString = "17:34:48";
-    boost::posix_time::ptime dateTime = stringToBoostTime(dateString, timeString);
-
-    EXPECT_EQ("2012-May-11 17:34:48" , toString(dateTime));
-}
-
-
-TEST(stringToBoostTime, HoursMinutes)
-{
-    string dateString = "05/11/2012";
-    string timeString = "17:34";
-    boost::posix_time::ptime dateTime = stringToBoostTime(dateString, timeString);
-
-    EXPECT_EQ("2012-May-11 17:34:00", toString(dateTime));
-}
 
 TEST(getFileNamesInDirectory, works)
 {

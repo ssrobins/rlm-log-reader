@@ -20,8 +20,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -245,32 +243,6 @@ std::string durationToHHMMSS(std::chrono::nanoseconds duration)
 
     return durationStream.str();
 }
-
-boost::posix_time::ptime stringToBoostTime(string& dateString,
-                        string& timeString)
-{
-    boost::gregorian::date boostDate(boost::gregorian::from_us_string(dateString));
-
-    vector<string> timeVector;
-    tokenizeString(":", timeString, timeVector);
-    int intHours = atoi(timeVector.at(0).c_str());
-    int intMinutes = atoi(timeVector.at(1).c_str());
-    int intSeconds;
-
-    if (timeVector.size() < 3)
-    {
-        intSeconds = 0;
-    }
-    else
-    {
-        intSeconds = atoi(timeVector.at(2).c_str());
-    }
-
-    boost::posix_time::ptime dateTime(boostDate, boost::posix_time::hours(intHours)+boost::posix_time::minutes(intMinutes)+boost::posix_time::seconds(intSeconds));
-    
-    return dateTime;
-}
-
 
 void parseDataInto2DVector(const vector<string>& rowData,
                            vector< vector<string> >& parsedData)

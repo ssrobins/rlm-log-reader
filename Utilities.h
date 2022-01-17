@@ -20,7 +20,6 @@
 #include <vector>
 #include <string>
 #include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
 
@@ -52,12 +51,7 @@ string getFilenameFromFilepath(const string& filepath);
 
 std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString);
 
-boost::posix_time::ptime stringToBoostTime(string& dateString,
-                        string& timeString);
-
 std::string durationToHHMMSS(std::chrono::nanoseconds duration);
-
-string boostTimeToString(boost::posix_time::ptime& dateTime);
 
 template <typename T>
 string toString(T& value)

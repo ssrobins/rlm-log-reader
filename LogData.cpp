@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <assert.h>
 #include <map>
-#include <boost/date_time/gregorian/gregorian.hpp>
 #include "LogData.h"
 
 using namespace std;
@@ -907,7 +906,7 @@ void LogData::writeTotalDuration(const string& outputFilePath)
 
         for (size_t row=0; row < m_uniqueUsers.size(); ++row)
         {
-            vector<boost::posix_time::time_duration> tempDurationVector;
+            vector<std::chrono::nanoseconds> tempDurationVector;
             myfile << m_uniqueUsers.at(row) << ",";
             
             size_t columnSize = m_uniqueProducts.size();
