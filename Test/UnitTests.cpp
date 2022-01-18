@@ -189,7 +189,7 @@ TEST(stringToTime, HoursMinutesSeconds)
     string timeString = "17:34:48";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ(1336786488, std::chrono::system_clock::to_time_t(datetime));
+    EXPECT_EQ(1336786488000000, datetime.time_since_epoch().count());
 }
 
 
@@ -199,7 +199,7 @@ TEST(stringToTime, HoursMinutes)
     string timeString = "17:34";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ(1336786440, std::chrono::system_clock::to_time_t(datetime));
+    EXPECT_EQ(1336786440000000, datetime.time_since_epoch().count());
 }
 
 
