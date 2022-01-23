@@ -192,9 +192,9 @@ TEST(stringToTime, HoursMinutesSeconds)
 
     std::ostringstream datetimestream;
     using namespace date;
-    datetimestream << date::format("%F %T", datetime);
+    datetimestream << date::format("%F %T", date::floor<std::chrono::seconds>(datetime));
 
-    EXPECT_EQ("2012-05-11 17:34:48.000000", datetimestream.str());
+    EXPECT_EQ("2012-05-11 17:34:48", datetimestream.str());
 }
 
 
@@ -206,9 +206,9 @@ TEST(stringToTime, HoursMinutes)
 
     std::ostringstream datetimestream;
     using namespace date;
-    datetimestream << date::format("%F %T", datetime);
+    datetimestream << date::format("%F %T", date::floor<std::chrono::seconds>(datetime));
 
-    EXPECT_EQ("2012-05-11 17:34:00.000000", datetimestream.str());
+    EXPECT_EQ("2012-05-11 17:34:00", datetimestream.str());
 }
 
 
