@@ -18,12 +18,10 @@
 #include "date/date.h"
 #include "Utilities.h"
 #include "Exceptions.h"
+#include "qdir.h"
 #include <fstream>
 #include <string>
 #include <vector>
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 using namespace std;
 
@@ -263,17 +261,16 @@ void parseDataInto2DVector(const vector<string>& rowData,
 
 void getFileListInDirectory(const string& directory, vector<string>& fileList)
 {
-    if (boost::filesystem::is_directory(directory))
+    if (QDir(directory.c_str()).exists())
     {
         string filePath;
-        boost::filesystem::directory_iterator end;
 
-        for(boost::filesystem::directory_iterator iter(directory); iter != end; ++iter)
+        QStringList entries = QDir(directory.c_str()).entryList();
+        for(QStringList::ConstIterator entry=entries.begin(); entry!=entries.end(); ++entry)
         {
-            if (! is_directory( *iter ) )
+            if (!QDir(*entry).exists())
             {
-                filePath = toString(iter->path());
-                findReplaceAll("\"", "", filePath);
+                filePath = QDir((*entry)).absolutePath().toLocal8Bit().constData();
                 fileList.push_back(filePath);
             }
         }

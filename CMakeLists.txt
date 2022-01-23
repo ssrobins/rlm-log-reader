@@ -59,31 +59,6 @@ if(CONAN_BUILD_MISSING_PKGS)
 endif()
 
 set(conan_options
-    -o boost:without_chrono=True
-    -o boost:without_container=True
-    -o boost:without_context=True
-    -o boost:without_contract=True
-    -o boost:without_coroutine=True
-    -o boost:without_coroutine=True
-    -o boost:without_exception=True
-    -o boost:without_fiber=True
-    -o boost:without_graph=True
-    -o boost:without_iostreams=True
-    -o boost:without_json=True
-    -o boost:without_locale=True
-    -o boost:without_log=True
-    -o boost:without_math=True
-    -o boost:without_nowide=True
-    -o boost:without_program_options=True
-    -o boost:without_random=True
-    -o boost:without_regex=True
-    -o boost:without_serialization=True
-    -o boost:without_stacktrace=True
-    -o boost:without_test=True
-    -o boost:without_thread=True
-    -o boost:without_timer=True
-    -o boost:without_type_erasure=True
-    -o boost:without_wave=True
     -o qt:qt3d=False
     -o qt:qtactiveqt=False
     -o qt:qtandroidextras=False
@@ -151,9 +126,6 @@ if(MSVC)
     )
 endif()
 
-# Boost
-find_package(Boost REQUIRED)
-
 # Qt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -175,8 +147,8 @@ target_include_directories(Data PUBLIC
 )
 
 target_link_libraries(Data
-    CONAN_PKG::boost
     CONAN_PKG::date
+    CONAN_PKG::qt
 )
 
 add_executable(${project_name} WIN32 MACOSX_BUNDLE)
