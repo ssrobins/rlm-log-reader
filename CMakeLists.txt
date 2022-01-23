@@ -176,6 +176,7 @@ target_include_directories(Data PUBLIC
 
 target_link_libraries(Data
     CONAN_PKG::boost
+    CONAN_PKG::date
 )
 
 add_executable(${project_name} WIN32 MACOSX_BUNDLE)

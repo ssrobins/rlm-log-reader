@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "date/date.h"
 #include "Utilities.h"
 #include "Exceptions.h"
 #include <fstream>
@@ -211,35 +212,36 @@ string getFilenameFromFilepath(const string& filepath)
 
 std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString)
 {
-    std::tm tm = {};
-    const std::string datetime = dateString + " " + timeString;
-    std::stringstream ss(datetime);
-    ss >> std::get_time(&tm, "%D %H:%M:%S");
-    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    vector<string> timeVector;
+    tokenizeString(":", timeString, timeVector);
+    std::string hours = timeVector.at(0).c_str();
+    std::string minutes = timeVector.at(1).c_str();
+    std::string seconds;
+
+    if (timeVector.size() < 3)
+    {
+        seconds = "00";
+    }
+    else
+    {
+        seconds = timeVector.at(2).c_str();
+    }
+
+    const std::string datetime = dateString + " " + hours + ":" + minutes + ":" + seconds;
+    std::istringstream in{datetime};
+    std::chrono::time_point<std::chrono::system_clock> tp;
+    using namespace date;
+    in >> date::parse("%m/%d/%Y %T", tp);
+
+    return tp;
 }
 
 std::string durationToHHMMSS(std::chrono::nanoseconds duration)
 {
-    auto hours = std::chrono::duration_cast<std::chrono::hours>(duration);
-    std::stringstream durationHoursStream;
-    durationHoursStream << std::setw(2) << std::setfill('0') << hours.count();
-    std::string durationHours = durationHoursStream.str();
-
-    duration -= hours;
-
-    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
-    std::stringstream durationMinutesStream;
-    durationMinutesStream << std::setw(2) << std::setfill('0') << minutes.count();
-    std::string durationMinutes = durationMinutesStream.str();
-
-    duration -= minutes;
-
-    std::stringstream durationSecondsStream;
-    durationSecondsStream << std::setw(2) << std::setfill('0') << std::chrono::duration_cast<std::chrono::seconds>(duration).count();
-    std::string durationSeconds = durationSecondsStream.str();
-
-    std::stringstream durationStream;
-    durationStream << durationHours << ":" << durationMinutes << ":" << durationSeconds;
+    auto durationFloorSeconds = date::floor<std::chrono::seconds>(duration);
+    using namespace date;
+    std::ostringstream durationStream;
+    durationStream << date::format("%T", durationFloorSeconds);
 
     return durationStream.str();
 }

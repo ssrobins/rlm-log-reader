@@ -36,6 +36,7 @@ target_include_directories(RLMLogReaderTest PRIVATE
 
 target_link_libraries(RLMLogReaderTest
     CONAN_PKG::gtest
+    CONAN_PKG::date
     Data
 )
 

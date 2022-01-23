@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "date/date.h"
 #include "LogData.h"
 #include "Utilities.h"
 #include "TestConfig.h"
@@ -189,7 +190,11 @@ TEST(stringToTime, HoursMinutesSeconds)
     string timeString = "17:34:48";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ(1336786488000000, datetime.time_since_epoch().count());
+    std::ostringstream datetimestream;
+    using namespace date;
+    datetimestream << date::format("%F %T", datetime);
+
+    EXPECT_EQ("2012-05-11 17:34:48.000000", datetimestream.str());
 }
 
 
@@ -199,7 +204,11 @@ TEST(stringToTime, HoursMinutes)
     string timeString = "17:34";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ(1336786440000000, datetime.time_since_epoch().count());
+    std::ostringstream datetimestream;
+    using namespace date;
+    datetimestream << date::format("%F %T", datetime);
+
+    EXPECT_EQ("2012-05-11 17:34:00.000000", datetimestream.str());
 }
 
 
