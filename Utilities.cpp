@@ -225,7 +225,7 @@ std::chrono::time_point<std::chrono::system_clock> stringToTime(const std::strin
     }
 
     const std::string datetime = dateString + " " + hours + ":" + minutes + ":" + seconds;
-    std::stringstream in{datetime};
+    std::istringstream in{datetime};
     std::chrono::time_point<std::chrono::system_clock> tp;
     using namespace date;
     in >> date::parse("%m/%d/%Y %T", tp);
