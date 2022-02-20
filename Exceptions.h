@@ -21,15 +21,13 @@
 #include <sstream>
 #include "Utilities.h"
 
-using namespace std;
 
-
-class EventDataException: public exception
+class EventDataException: public std::exception
 {
 public:
     EventDataException(size_t row)
     {
-        string rowString = toString(row);
+        std::string rowString = toString(row);
         m_error = "Missing data on line " + rowString;
     }
     ~EventDataException() throw() {}
@@ -38,16 +36,16 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class INEventDetailException: public exception
+class INEventDetailException: public std::exception
 {
 public:
     INEventDetailException(size_t row)
     {
-        string rowString = toString(row);
+        std::string rowString = toString(row);
         m_error = "Unexpected IN event details on line " + rowString;
     }
     ~INEventDetailException() throw() {}
@@ -56,16 +54,16 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class InvalidProductVersionException: public exception
+class InvalidProductVersionException: public std::exception
 {
 public:
     InvalidProductVersionException(size_t row)
     {
-        string rowString = toString(row);
+        std::string rowString = toString(row);
         m_error = "Invalid product version formatting on line " + rowString;
     }
     ~InvalidProductVersionException() throw() {}
@@ -74,14 +72,14 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class CannotOpenFileException: public exception
+class CannotOpenFileException: public std::exception
 {
 public:
-    CannotOpenFileException(string filePath)
+    CannotOpenFileException(std::string filePath)
     {
         if (filePath.empty())
         {
@@ -98,14 +96,14 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class CannotFindDirException: public exception
+class CannotFindDirException: public std::exception
 {
 public:
-    CannotFindDirException(string dirPath)
+    CannotFindDirException(std::string dirPath)
     {
         if (dirPath.empty())
         {
@@ -122,11 +120,11 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class InvalidFileFormatException: public exception
+class InvalidFileFormatException: public std::exception
 {
 public:
     InvalidFileFormatException()
@@ -140,14 +138,14 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };
 
 
-class InvalidIndexException: public exception
+class InvalidIndexException: public std::exception
 {
 public:
-    InvalidIndexException(string indexName)
+    InvalidIndexException(std::string indexName)
     {
         m_error = "No index to '" + indexName + "'";
     }
@@ -157,5 +155,5 @@ public:
         return m_error.c_str();
     }
 private:
-    string m_error;
+    std::string m_error;
 };

@@ -22,7 +22,6 @@
 #include <vector>
 #include <map>
 
-using namespace std;
 
 enum fileFormat
 {
@@ -35,9 +34,9 @@ enum fileFormat
 class LogData
 {
     public:
-        LogData(const string& inputFilePath, const string& outputDirectory);
+        LogData(const std::string& inputFilePath, const std::string& outputDirectory);
         ~LogData() {}
-        void checkForExistingFiles(string& conflictedFiles);
+        void checkForExistingFiles(std::string& conflictedFiles);
         void publishResults();
         void publishEventDataResults();
         size_t fileFormat();
@@ -48,77 +47,77 @@ class LogData
         void getEventIndices();
         void addYearToDate();
         void standardizeLogFormatting();
-        void loadEventIntoVector(const vector<string>& allDataRow,
+        void loadEventIntoVector(const std::vector<std::string>& allDataRow,
                                  const size_t row,
-                                 const vector<size_t>& indices);
+                                 const std::vector<size_t>& indices);
         void getConcurrentUsage();
         int getCountOffset(const size_t& row);
         void gatherConcurrentUsageData(const size_t& row,
-                                       const vector<string>& licenseUsageCount,
-                                       const vector<size_t>& uniqueLicenseCountsByProduct,
-                                       const vector<string>& maxLicenseUsageCount);
+                                       const std::vector<std::string>& licenseUsageCount,
+                                       const std::vector<size_t>& uniqueLicenseCountsByProduct,
+                                       const std::vector<std::string>& maxLicenseUsageCount);
         void getUsageDuration();
-        size_t getIndex(const string& name, const vector<string>& list);
+        size_t getIndex(const std::string& name, const std::vector<std::string>& list);
 
-        void writeSummaryData(const string& outputFilePath);
-        void writeTotalDuration(const string& outputFilePath);
+        void writeSummaryData(const std::string& outputFilePath);
+        void writeTotalDuration(const std::string& outputFilePath);
 
         // Methods that tweak the ISV log format to look more like the Report log format
         void reformatEventName(const size_t row,
-                               const string newLabel);
+                               const std::string newLabel);
 
         void reformatUserHost(const size_t row,
-                              const vector<size_t>& indices);
+                              const std::vector<size_t>& indices);
 
         void reformatProductVersion(const size_t row,
                                     const size_t col,
-                                    vector<string>& allDataRow);
+                                    std::vector<std::string>& allDataRow);
 
-        void reformatToken(vector<string>& allDataRow);
+        void reformatToken(std::vector<std::string>& allDataRow);
 
         void removeInDetails(const size_t row,
-                              vector<string>& allDataRow);
+                              std::vector<std::string>& allDataRow);
 
         void removeNoGood(const size_t row,
-                          vector<string>& allDataRow);
+                          std::vector<std::string>& allDataRow);
 
-        void licenseCountAdjust(vector<size_t>& licenseCountNumbers,
-                        vector<string>& licenseCountsByProduct);
+        void licenseCountAdjust(std::vector<size_t>& licenseCountNumbers,
+                        std::vector<std::string>& licenseCountsByProduct);
 
         void checkForValidProductVersion(const size_t row,
                                          const size_t col,
-                                         vector<string>& allDataRow);
+                                         std::vector<std::string>& allDataRow);
 
         void checkForUnhandledINDetails(const size_t row);
 
-        string m_inputFilePath;
-        string m_inputFileName;
-        string m_outputDirectory;
+        std::string m_inputFilePath;
+        std::string m_inputFileName;
+        std::string m_outputDirectory;
         enum fileFormat m_fileFormat;
-        vector<string> m_outputPaths;
-        vector<string> m_rawData;
-        vector< vector<string> > m_allData;
-        vector< vector<string> > m_eventData;
-        vector< vector<string> > m_denialEvents;
-        vector< vector<string> > m_shutdownEvents;
-        vector< vector<string> > m_startEvents;
-        vector<string> m_uniqueProducts;
-        vector<string> m_uniqueUsers;
+        std::vector<std::string> m_outputPaths;
+        std::vector<std::string> m_rawData;
+        std::vector< std::vector<std::string> > m_allData;
+        std::vector< std::vector<std::string> > m_eventData;
+        std::vector< std::vector<std::string> > m_denialEvents;
+        std::vector< std::vector<std::string> > m_shutdownEvents;
+        std::vector< std::vector<std::string> > m_startEvents;
+        std::vector<std::string> m_uniqueProducts;
+        std::vector<std::string> m_uniqueUsers;
 
-        string m_eventYear;
-        string m_serverName;
+        std::string m_eventYear;
+        std::string m_serverName;
 
         size_t m_eventIndex;
-        vector<size_t> m_OUTindices;
-        vector<size_t> m_INindices;
-        vector<size_t> m_DENYindices;
-        vector<size_t> m_STARTindices;
-        vector<size_t> m_SHUTindices;
-        vector<size_t> m_PRODUCTindices;
+        std::vector<size_t> m_OUTindices;
+        std::vector<size_t> m_INindices;
+        std::vector<size_t> m_DENYindices;
+        std::vector<size_t> m_STARTindices;
+        std::vector<size_t> m_SHUTindices;
+        std::vector<size_t> m_PRODUCTindices;
 
-        vector< vector<string> > m_usage;
-        vector< vector<string> > m_usageDuration;
-        vector< vector<std::chrono::nanoseconds> > m_totalDuration;
+        std::vector< std::vector<std::string> > m_usage;
+        std::vector< std::vector<std::string> > m_usageDuration;
+        std::vector< std::vector<std::chrono::nanoseconds> > m_totalDuration;
 
         size_t m_endTimeRow;
 };

@@ -28,10 +28,8 @@
 #include <map>
 #include "LogData.h"
 
-using namespace std;
 
-
-LogData::LogData(const string& inputFilePath, const string& outputDirectory)
+LogData::LogData(const std::string& inputFilePath, const std::string& outputDirectory)
 {
     m_inputFilePath = inputFilePath;
     m_outputDirectory = outputDirectory;
@@ -120,8 +118,8 @@ void LogData::extractEvents()
         standardizeLogFormatting();
     }
 
-    string productName;
-    string userName;
+    std::string productName;
+    std::string userName;
     size_t eventRow;
 
     for (size_t row=0; row<m_allData.size(); ++row)
@@ -129,7 +127,7 @@ void LogData::extractEvents()
         // Check for existence of date, and if so update the year
         if (m_allData.at(row).size() == 2)
         {
-            vector<string> tempVector;
+            std::vector<std::string> tempVector;
             tokenizeString("/", m_allData.at(row).at(0), tempVector);
             if (tempVector.size() == 3)
             {
@@ -187,7 +185,7 @@ void LogData::extractEvents()
                 if (m_fileFormat == ReportLog)
                 {
                     
-                    vector<string> tempVector;
+                    std::vector<std::string> tempVector;
                     tokenizeString("/", m_allData.at(row).at(RepSTARTIndexDate), tempVector);
                     m_eventYear =  tempVector.at(2);
                     m_endTimeRow = eventRow;
@@ -219,14 +217,14 @@ void LogData::addYearToDate()
     if (m_fileFormat == ReportLog)
     {
         size_t eventRow = m_eventData.size()-1;
-        string currentDate = m_eventData.at(eventRow).at(IndexDate);
+        std::string currentDate = m_eventData.at(eventRow).at(IndexDate);
 
         // If a log event occurs within the first minute after midnight, it is logged before
         // the string that provides the new year.  This code checks for events on Jan 1 at 00:00
         // and increments the year.
         if (currentDate == "01/01")
         {
-            vector<string> timeVector;
+            std::vector<std::string> timeVector;
             tokenizeString(":", m_eventData.at(eventRow).at(IndexTime), timeVector);
             if (timeVector.at(0) == "00" && timeVector.at(1) == "00")
             {
@@ -386,7 +384,7 @@ void LogData::standardizeLogFormatting()
 // We will look for the opening paren, ( and remove the range of elements starting there until reaching the 
 // closing paren, ).
 void LogData::removeInDetails(const size_t row,
-                              vector<string>& allDataRow)
+                              std::vector<std::string>& allDataRow)
 {
     size_t found = 0;
     if (allDataRow.at(isvINIndexProduct).at(0) == '(')
@@ -405,7 +403,7 @@ void LogData::removeInDetails(const size_t row,
 
 
 void LogData::removeNoGood(const size_t row,
-                  vector<string>& allDataRow)
+                  std::vector<std::string>& allDataRow)
 {
     if (allDataRow.at(isvDENYIndexProduct) == "no" &&
        (allDataRow.at(isvDENYIndexVersion) == "good"))
@@ -417,16 +415,16 @@ void LogData::removeNoGood(const size_t row,
 
 
 void LogData::reformatEventName(const size_t row,
-                                const string newLabel)
+                                const std::string newLabel)
 {
     m_allData.at(row).at(m_eventIndex) = newLabel;
 }
 
 
 void LogData::reformatUserHost(const size_t row,
-                               const vector<size_t>& indices)
+                               const std::vector<size_t>& indices)
 {
-    vector<string> tempVector;
+    std::vector<std::string> tempVector;
     size_t userIndex = indices.at(IndexUser);
     size_t hostIndex = indices.at(IndexHost);
 
@@ -439,16 +437,16 @@ void LogData::reformatUserHost(const size_t row,
 
 void LogData::reformatProductVersion(const size_t row,
                                      const size_t col,
-                                     vector<string>& allDataRow)
+                                     std::vector<std::string>& allDataRow)
 {
     checkForValidProductVersion(row, col, allDataRow);
-    string tempString = allDataRow.at(col);
+    std::string tempString = allDataRow.at(col);
     tempString.erase(0,1);
     allDataRow.at(col) = tempString;
 }
 
 
-void LogData::reformatToken(vector<string>& allDataRow)
+void LogData::reformatToken(std::vector<std::string>& allDataRow)
 {
     // Try to find the token license count, which is in the string "(# licenses)",
     // which has already been split up into two elements, "(#" and "licenses)"
@@ -461,7 +459,7 @@ void LogData::reformatToken(vector<string>& allDataRow)
             tokenFound = true;
 
             // Element before "licenses" is the actual token count
-            string tempString = allDataRow.at(col-1);
+            std::string tempString = allDataRow.at(col-1);
 
             // Strip the leading paren, (
             tempString.erase(0,1);
@@ -479,24 +477,24 @@ void LogData::reformatToken(vector<string>& allDataRow)
 
 
 
-void LogData::licenseCountAdjust(vector<size_t>& licenseCountNumbers,
-                        vector<string>& licenseCountsByProduct)
+void LogData::licenseCountAdjust(std::vector<size_t>& licenseCountNumbers,
+                        std::vector<std::string>& licenseCountsByProduct)
 {
     licenseCountsByProduct.clear();
     for (size_t product=0; product<licenseCountNumbers.size(); ++product)
     {
-        string licenseCountString = toString(licenseCountNumbers.at(product));
+        std::string licenseCountString = toString(licenseCountNumbers.at(product));
         licenseCountsByProduct.push_back(licenseCountString);
     }
 }
 
 
 
-void LogData::loadEventIntoVector(const vector<string>& allDataRow,
+void LogData::loadEventIntoVector(const std::vector<std::string>& allDataRow,
                                   const size_t row,
-                                  const vector<size_t>& indices)
+                                  const std::vector<size_t>& indices)
 {
-    vector<string> eventLine;
+    std::vector<std::string> eventLine;
     if (allDataRow.size() >= indices.size())
     {
         for (size_t col=0; col<indices.size(); ++col)
@@ -513,7 +511,7 @@ void LogData::loadEventIntoVector(const vector<string>& allDataRow,
 }
 
 
-size_t LogData::getIndex(const string& name, const vector<string>& list)
+size_t LogData::getIndex(const std::string& name, const std::vector<std::string>& list)
 {
     for (size_t index=0; index < list.size(); ++index)
     {
@@ -530,9 +528,9 @@ size_t LogData::getIndex(const string& name, const vector<string>& list)
 
 void LogData::checkForValidProductVersion(const size_t row,
                                  const size_t col,
-                                 vector<string>& allDataRow)
+                                 std::vector<std::string>& allDataRow)
 {
-    string productVersion = allDataRow.at(col);
+    std::string productVersion = allDataRow.at(col);
 
     // Check for the "v" at the beginning of the product version
     size_t found = productVersion.find("v");
@@ -558,18 +556,18 @@ void LogData::checkForUnhandledINDetails(const size_t row)
 
 void LogData::getConcurrentUsage()
 {
-    vector<string> licenseCountsByProduct (m_uniqueProducts.size(), "0");
-    vector<size_t> uniqueLicenseCountsByProduct (m_uniqueProducts.size(), 0);
-    vector< vector<size_t> > licenseCountByProductAndUser;
-    vector<string> maxLicenseCountsByProduct (m_uniqueProducts.size(), "0");
-    vector<size_t> licenseCountNumbers (m_uniqueProducts.size(), 0);
+    std::vector<std::string> licenseCountsByProduct (m_uniqueProducts.size(), "0");
+    std::vector<size_t> uniqueLicenseCountsByProduct (m_uniqueProducts.size(), 0);
+    std::vector<std::vector<size_t>> licenseCountByProductAndUser;
+    std::vector<std::string> maxLicenseCountsByProduct (m_uniqueProducts.size(), "0");
+    std::vector<size_t> licenseCountNumbers (m_uniqueProducts.size(), 0);
     size_t productCountIndex;
     size_t userCountIndex;
 
     // Initialize matrix for license count by user and product
     for (size_t row=0; row < m_uniqueUsers.size(); ++row)
     {
-        vector<size_t> tempCountVector;
+        std::vector<size_t> tempCountVector;
         for (size_t col=0; col < m_uniqueProducts.size(); ++col)
         {
             tempCountVector.push_back(0);
@@ -577,7 +575,7 @@ void LogData::getConcurrentUsage()
         licenseCountByProductAndUser.push_back(tempCountVector);
     }
 
-    vector<string> tempVector;
+    std::vector<std::string> tempVector;
     tempVector.push_back("Date/Time");
     for (size_t product=0; product<m_uniqueProducts.size(); ++product)
     {
@@ -679,7 +677,7 @@ void LogData::getConcurrentUsage()
         }
         else if (m_eventData.at(row).at(IndexEvent) == "PRODUCT")
         {
-            string tempProduct = m_eventData.at(row).at(1);
+            std::string tempProduct = m_eventData.at(row).at(1);
             productCountIndex = getIndex(tempProduct, m_uniqueProducts);
             if (m_fileFormat == ReportLog)
             {
@@ -697,11 +695,11 @@ int LogData::getCountOffset(const size_t& row)
 
 
 void LogData::gatherConcurrentUsageData(const size_t& row,
-                                        const vector<string>& licenseUsageCount,
-                                        const vector<size_t>& uniqueLicenseCountsByProduct,
-                                        const vector<string>& maxLicenseUsageCount)
+                                        const std::vector<std::string>& licenseUsageCount,
+                                        const std::vector<size_t>& uniqueLicenseCountsByProduct,
+                                        const std::vector<std::string>& maxLicenseUsageCount)
 {
-    vector<string> tempVector;
+    std::vector<std::string> tempVector;
     tempVector.push_back(m_eventData.at(row).at(IndexDate) + " " + m_eventData.at(row).at(IndexTime));
 
     for (size_t product=0; product<licenseUsageCount.size(); ++product)
@@ -722,7 +720,7 @@ void LogData::getUsageDuration()
 {
     int checkInRow = -1;
 
-    vector<string> tempVector;
+    std::vector<std::string> tempVector;
     tempVector.push_back("Checkout Date/Time");
     tempVector.push_back("Checkin Date/Time");
     tempVector.push_back("Product");
@@ -734,7 +732,7 @@ void LogData::getUsageDuration()
     // Initialize matrix for total duration by user and product
     for (size_t row=0; row < m_uniqueUsers.size(); ++row)
     {
-        vector<std::chrono::nanoseconds> tempDurationVector;
+        std::vector<std::chrono::nanoseconds> tempDurationVector;
         for (size_t col=0; col < m_uniqueProducts.size(); ++col)
         {
             std::chrono::nanoseconds td = std::chrono::seconds{0};
@@ -748,9 +746,9 @@ void LogData::getUsageDuration()
     {
         if (m_eventData.at(row).at(IndexEvent) == "OUT")
         {
-            string handle = m_eventData.at(row).at(IndexHandle);
-            string product = m_eventData.at(row).at(IndexProduct);
-            string userName = m_eventData.at(row).at(IndexUser);
+            std::string handle = m_eventData.at(row).at(IndexHandle);
+            std::string product = m_eventData.at(row).at(IndexProduct);
+            std::string userName = m_eventData.at(row).at(IndexUser);
             auto startTime = stringToTime(m_eventData.at(row).at(IndexDate),
                                                 m_eventData.at(row).at(IndexTime));
             std::chrono::time_point<std::chrono::system_clock> endTime;
@@ -785,16 +783,16 @@ void LogData::getUsageDuration()
             }
             std::chrono::nanoseconds usageDuration = endTime - startTime;
             m_totalDuration.at(getIndex(userName, m_uniqueUsers)).at(getIndex(product, m_uniqueProducts)) += usageDuration;
-            string usageDurationString = durationToHHMMSS(usageDuration);
+            std::string usageDurationString = durationToHHMMSS(usageDuration);
             
-            vector<string> tempVector;
+            std::vector<std::string> tempVector;
 
-            string dateTimeCheckOut = m_eventData.at(row).at(IndexDate) + " " + m_eventData.at(row).at(IndexTime);
+            std::string dateTimeCheckOut = m_eventData.at(row).at(IndexDate) + " " + m_eventData.at(row).at(IndexTime);
 
             tempVector.push_back(dateTimeCheckOut);
             if (checkInRow != -1)
             {
-                string dateTimeCheckIn = m_eventData.at(checkInRow).at(IndexDate) + " " + m_eventData.at(checkInRow).at(IndexTime);
+                std::string dateTimeCheckIn = m_eventData.at(checkInRow).at(IndexDate) + " " + m_eventData.at(checkInRow).at(IndexTime);
                 tempVector.push_back(dateTimeCheckIn);
             }
             else
@@ -814,9 +812,9 @@ void LogData::getUsageDuration()
 }
 
 
-void LogData::writeSummaryData(const string& outputFilePath)
+void LogData::writeSummaryData(const std::string& outputFilePath)
 {
-    ofstream myfile;
+    std::ofstream myfile;
     myfile.open (outputFilePath.c_str());
 
     if (myfile.is_open())
@@ -885,9 +883,9 @@ void LogData::writeSummaryData(const string& outputFilePath)
 }
 
 
-void LogData::writeTotalDuration(const string& outputFilePath)
+void LogData::writeTotalDuration(const std::string& outputFilePath)
 {
-    ofstream myfile;
+    std::ofstream myfile;
     myfile.open (outputFilePath.c_str());
 
     if (myfile.is_open())
@@ -906,13 +904,13 @@ void LogData::writeTotalDuration(const string& outputFilePath)
 
         for (size_t row=0; row < m_uniqueUsers.size(); ++row)
         {
-            vector<std::chrono::nanoseconds> tempDurationVector;
+            std::vector<std::chrono::nanoseconds> tempDurationVector;
             myfile << m_uniqueUsers.at(row) << ",";
             
             size_t columnSize = m_uniqueProducts.size();
             for (size_t col=0; col < columnSize; ++col)
             {
-                string usageDurationString = durationToHHMMSS(m_totalDuration.at(row).at(col));
+                std::string usageDurationString = durationToHHMMSS(m_totalDuration.at(row).at(col));
                 myfile << usageDurationString;
                 if (col != columnSize-1)
                 {
@@ -945,7 +943,7 @@ void LogData::setOutputPaths()
 }
 
 
-void LogData::checkForExistingFiles(string& conflictedFileList)
+void LogData::checkForExistingFiles(std::string& conflictedFileList)
 {
     for (size_t file=0; file < m_outputPaths.size(); ++file)
     {

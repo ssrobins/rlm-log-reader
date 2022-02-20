@@ -22,7 +22,7 @@
 #include "gtest/gtest.h"
 
 
-void lineBreakTests(vector<string>& rawData)
+void lineBreakTests(std::vector<std::string>& rawData)
 {
     ASSERT_EQ(3, rawData.size());
     EXPECT_EQ("First line", rawData.at(0));
@@ -31,7 +31,7 @@ void lineBreakTests(vector<string>& rawData)
 }
 TEST(loadDataFromFile, WithWindowsLineBreaks)
 {
-    vector<string> rawData;
+    std::vector<std::string> rawData;
     loadDataFromFile(testInputDirectory + "/TestFileWindows.txt", rawData);
     lineBreakTests(rawData);
 }
@@ -39,28 +39,28 @@ TEST(loadDataFromFile, WithWindowsLineBreaks)
 // So this test applies to Linux, UNIX, and Mac
 TEST(loadDataFromFile, WithUNIXLineBreaks)
 {
-    vector<string> rawData;
+    std::vector<std::string> rawData;
     loadDataFromFile(testInputDirectory + "/TestFileUNIX.txt", rawData);
     lineBreakTests(rawData);
 }
 
 TEST(loadDataFromFile, EmptyFile)
 {
-    vector<string> rawData;
+    std::vector<std::string> rawData;
     loadDataFromFile(testInputDirectory + "/TestFileEmpty.txt", rawData);
     EXPECT_EQ("", rawData.at(0));
 }
 
 TEST(loadDataFromFile, CannotFindFile)
 {
-    vector<string> rawData;
-    string inputFilePath = testInputDirectory + "/TestFileThatDoesNotExist.txt";
-    string errorMessage;
+    std::vector<std::string> rawData;
+    std::string inputFilePath = testInputDirectory + "/TestFileThatDoesNotExist.txt";
+    std::string errorMessage;
     try
     {
         loadDataFromFile(inputFilePath, rawData);
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         errorMessage = e.what();
     }
@@ -70,12 +70,12 @@ TEST(loadDataFromFile, CannotFindFile)
 
 TEST(tokenizeString, Empty)
 {
-    vector<string> tokenVector;
+    std::vector<std::string> tokenVector;
     tokenizeString(" ", "" , tokenVector);
     ASSERT_EQ(0, tokenVector.size());
 }
 
-void delimiterTests(vector<string>& tokenVector)
+void delimiterTests(std::vector<std::string>& tokenVector)
 {
     ASSERT_EQ(3, tokenVector.size());
     EXPECT_EQ("I", tokenVector.at(0));
@@ -84,25 +84,25 @@ void delimiterTests(vector<string>& tokenVector)
 }
 TEST(tokenizeString, SingleConsecutiveDelimiter)
 {
-    vector<string> tokenVector;
+    std::vector<std::string> tokenVector;
     tokenizeString(" ", "I am Sam", tokenVector);
     delimiterTests(tokenVector);
 }
 TEST(tokenizeString, AlternateDelimiter)
 {
-    vector<string> tokenVector;
+    std::vector<std::string> tokenVector;
     tokenizeString("@", "I@am@Sam", tokenVector);
     delimiterTests(tokenVector);
 }
 TEST(tokenizeString, MultipleConsecutiveDelimiters)
 {
-    vector<string> tokenVector;
+    std::vector<std::string> tokenVector;
     tokenizeString(" ", " I  am   Sam    ", tokenVector);
     delimiterTests(tokenVector);
 }
 TEST(tokenizeString, IgnoreDelimitersBetweenQuotes)
 {
-    vector<string> tokenVector;
+    std::vector<std::string> tokenVector;
     tokenizeString(" ", "\"I am Sam\" \"Sam I am\"", tokenVector);
     ASSERT_EQ(2, tokenVector.size());
     EXPECT_EQ("I am Sam", tokenVector.at(0));
@@ -112,13 +112,13 @@ TEST(tokenizeString, IgnoreDelimitersBetweenQuotes)
 
 TEST(parseDataVector, Simple)
 {
-    vector<string> rawData;
+    std::vector<std::string> rawData;
     rawData.push_back("");
     rawData.push_back("I am Sam");
     rawData.push_back("");
     rawData.push_back("");
     rawData.push_back("W00t!");
-    vector< vector<string> > allData;
+    std::vector< std::vector<std::string> > allData;
     parseDataInto2DVector(rawData, allData);
     ASSERT_EQ(5,allData.size());
     EXPECT_EQ("I", allData[1][0]);
@@ -130,8 +130,8 @@ TEST(parseDataVector, Simple)
 
 TEST(getUniqueItems, FirstItem)
 {
-    vector<string> uniqueItems;
-    string item = "spoon";
+    std::vector<std::string> uniqueItems;
+    std::string item = "spoon";
     getUniqueItems(item, uniqueItems);
     ASSERT_EQ(1, uniqueItems.size());
     EXPECT_EQ("spoon", uniqueItems[0]);
@@ -140,9 +140,9 @@ TEST(getUniqueItems, FirstItem)
 
 TEST(getUniqueItems, NewItemIsDuplicate)
 {
-    vector<string> uniqueItems;
+    std::vector<std::string> uniqueItems;
     uniqueItems.push_back("spoon");
-    string item = "spoon";
+    std::string item = "spoon";
     getUniqueItems(item, uniqueItems);
     ASSERT_EQ(1, uniqueItems.size());
     EXPECT_EQ("spoon", uniqueItems[0]);
@@ -150,9 +150,9 @@ TEST(getUniqueItems, NewItemIsDuplicate)
 
 TEST(getUniqueItems, NewItemIsUnique)
 {
-    vector<string> uniqueItems;
+    std::vector<std::string> uniqueItems;
     uniqueItems.push_back("spoon");
-    string item = "fork";
+    std::string item = "fork";
     getUniqueItems(item, uniqueItems);
     ASSERT_EQ(2, uniqueItems.size());
     EXPECT_EQ("spoon", uniqueItems[0]);
@@ -162,7 +162,7 @@ TEST(getUniqueItems, NewItemIsUnique)
 
 TEST(durationToHHMMSS, OneSecond)
 {
-    auto duration = 1s;
+    auto duration = std::chrono::seconds{1};
 
     EXPECT_EQ("00:00:01", durationToHHMMSS(duration));
 }
@@ -170,7 +170,7 @@ TEST(durationToHHMMSS, OneSecond)
 
 TEST(durationToHHMMSS, OneMinute)
 {
-    auto duration = 60s;
+    auto duration = std::chrono::seconds{60};
 
     EXPECT_EQ("00:01:00", durationToHHMMSS(duration));
 }
@@ -178,7 +178,7 @@ TEST(durationToHHMMSS, OneMinute)
 
 TEST(durationToHHMMSS, OneHour)
 {
-    auto duration = 3600s;
+    auto duration = std::chrono::seconds{3600};
 
     EXPECT_EQ("01:00:00", durationToHHMMSS(duration));
 }
@@ -186,8 +186,8 @@ TEST(durationToHHMMSS, OneHour)
 
 TEST(stringToTime, HoursMinutesSeconds)
 {
-    string dateString = "05/11/2012";
-    string timeString = "17:34:48";
+    std::string dateString = "05/11/2012";
+    std::string timeString = "17:34:48";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
     std::ostringstream datetimestream;
@@ -200,8 +200,8 @@ TEST(stringToTime, HoursMinutesSeconds)
 
 TEST(stringToTime, HoursMinutes)
 {
-    string dateString = "05/11/2012";
-    string timeString = "17:34";
+    std::string dateString = "05/11/2012";
+    std::string timeString = "17:34";
     std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
     std::ostringstream datetimestream;
@@ -214,7 +214,7 @@ TEST(stringToTime, HoursMinutes)
 
 TEST(getFileNamesInDirectory, works)
 {
-    vector<string> fileList;
+    std::vector<std::string> fileList;
     getFileListInDirectory(testInputDirectory, fileList);
     ASSERT_EQ(16, fileList.size());
 }
@@ -222,31 +222,31 @@ TEST(getFileNamesInDirectory, works)
 
 TEST(getFilenameFromFilepath, SingleExtensionWithBackSlashes)
 {
-    string filepath = "C\\Users\\steve\\Documents\\file.log";
+    std::string filepath = "C\\Users\\steve\\Documents\\file.log";
     EXPECT_EQ("file", getFilenameFromFilepath(filepath));
 }
 
 TEST(getFilenameFromFilepath, SingleExtensionWithforwardSlashes)
 {
-    string filepath = "/home/user/steve/Documents/file.log";
+    std::string filepath = "/home/user/steve/Documents/file.log";
     EXPECT_EQ("file", getFilenameFromFilepath(filepath));
 }
 
 TEST(getFilenameFromFilepath, WithMultiplePeriodsInFile)
 {
-    string filepath = "/home/user/steve/Documents/file.log.txt";
+    std::string filepath = "/home/user/steve/Documents/file.log.txt";
     EXPECT_EQ("file.log", getFilenameFromFilepath(filepath));
 }
 
 TEST(getFilenameFromFilepath, NoSlashes)
 {
-    string filepath = "blah!.exe";
+    std::string filepath = "blah!.exe";
     EXPECT_EQ("blah!", getFilenameFromFilepath(filepath));
 }
 
 TEST(getFilenameFromFilepath, NoPeriods)
 {
-    string filepath = "/etc/blah!";
+    std::string filepath = "/etc/blah!";
     EXPECT_EQ("blah!", getFilenameFromFilepath(filepath));
 }
 
@@ -258,13 +258,13 @@ TEST(toString, ConvertSizet)
 
 TEST(fileExists, True)
 {
-    string filePath = testInputDirectory + "/TestFileWindows.txt";
+    std::string filePath = testInputDirectory + "/TestFileWindows.txt";
     EXPECT_TRUE(fileExists(filePath));
 }
 
 TEST(fileExists, False)
 {
-    string filePath = testInputDirectory + "/TestFileThatDoesNotExist.txt";
+    std::string filePath = testInputDirectory + "/TestFileThatDoesNotExist.txt";
     EXPECT_FALSE(fileExists(filePath));
 }
 
