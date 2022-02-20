@@ -21,51 +21,49 @@
 #include <vector>
 #include <string>
 
-using namespace std;
 
+void loadDataFromFile(const std::string& filePath, std::vector<std::string>& fileData);
 
-void loadDataFromFile(const string& filePath, vector<string>& fileData);
+void tokenizeString(const std::string& delimiter,
+                    const std::string& rawEventData,
+                    std::vector<std::string>& tokens);
 
-void tokenizeString(const string& delimiter,
-                    const string& rawEventData,
-                    vector<string>& tokens);
+void untokenizeString(const std::string& delimiter,
+                    std::string& rawEventData,
+                    const std::vector<std::string>& tokens);
 
-void untokenizeString(const string& delimiter,
-                    string& rawEventData,
-                    const vector<string>& tokens);
+void getUniqueItems(std::string& item, std::vector<std::string>& uniqueItems);
 
-void getUniqueItems(string& item, vector<string>& uniqueItems);
+void write2DVectorToFile(const std::string filePath,
+                         const std::vector<std::vector<std::string>>& data,
+                         const std::string delimiter);
 
-void write2DVectorToFile(const string filePath,
-                         const vector < vector<string> >& data,
-                         const string delimiter);
+void findReplaceAll(const std::string oldPattern,
+                    const std::string newPattern,
+                    std::string& rawData);
 
-void findReplaceAll(const string oldPattern,
-                    const string newPattern,
-                    string& rawData);
+void setVectorToZero(std::vector<size_t>& vector);
+void setMatrixToZero(std::vector<std::vector<size_t>>& matrix);
 
-void setVectorToZero(vector<size_t>& licenseCountNumbers);
-void setMatrixToZero(vector< vector<size_t> >& matrix);
+std::string getFilenameFromFilepath(const std::string& filepath);
 
-string getFilenameFromFilepath(const string& filepath);
-
-std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString);
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const std::string& dateString, const std::string& timeString);
 
 std::string durationToHHMMSS(std::chrono::nanoseconds duration);
 
 template <typename T>
-string toString(T& value)
+std::string toString(T& value)
 {
     std::stringstream sstream;
     sstream << value;
-    string str = sstream.str();
+    std::string str = sstream.str();
 
     return str;
 }
 
-void parseDataInto2DVector(const vector<string>& rawData,
-                           vector< vector<string> >& allData);
+void parseDataInto2DVector(const std::vector<std::string>& rawData,
+                           std::vector<std::vector<std::string>>& allData);
 
-void getFileListInDirectory(const string& directory, vector<string>& fileList);
+void getFileListInDirectory(const std::string& directory, std::vector<std::string>& fileList);
 
-bool fileExists(const string& filePath);
+bool fileExists(const std::string& filePath);

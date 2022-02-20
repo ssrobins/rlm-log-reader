@@ -1,5 +1,5 @@
 #pragma once
 
-const string testInputDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/TestFiles";
-const string extraTestDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/ExtraTestFiles";
-const string testOutputDirectory = "@CMAKE_CURRENT_BINARY_DIR@/TestResults";
+const std::string testInputDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/TestFiles";
+const std::string extraTestDirectory = "@CMAKE_CURRENT_SOURCE_DIR@/ExtraTestFiles";
+const std::string testOutputDirectory = "@CMAKE_CURRENT_BINARY_DIR@/TestResults";

@@ -36,7 +36,7 @@ MainWindow::MainWindow(QMainWindow* parent)
 {
     ui.setupUi(this);
 
-    const string windowTitle = appTitle + " " + versionMajor + "." + versionMinor + "." + versionPatch;
+    const std::string windowTitle = appTitle + " " + versionMajor + "." + versionMinor + "." + versionPatch;
     QWidget::setWindowTitle(windowTitle.c_str());
  
     connect( this->ui.openButton, SIGNAL( clicked() ), this, SLOT(openButtonClicked()) );
@@ -121,12 +121,12 @@ void MainWindow::generateButtonClicked()
 
         LogData logData(inputFilePathString, outputDirectoryString);
 
-        string conflictedFileList;
+        std::string conflictedFileList;
         logData.checkForExistingFiles(conflictedFileList);
 
         if (! conflictedFileList.empty())
         {
-            string overwriteQuestion = "Do you wish to overwrite the following files?\n\n";
+            std::string overwriteQuestion = "Do you wish to overwrite the following files?\n\n";
             overwriteQuestion.append(conflictedFileList);
 
             QMessageBox messageBox;
@@ -152,7 +152,7 @@ void MainWindow::generateButtonClicked()
             QDesktopServices::openUrl(QUrl("file:///" + m_outputDirectory));
         }
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         QMessageBox messageBox;
         messageBox.setIcon(QMessageBox::Critical);

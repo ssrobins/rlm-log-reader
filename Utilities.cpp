@@ -23,12 +23,11 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 
-void loadDataFromFile(const string& filePath, vector<string>& fileData)
+void loadDataFromFile(const std::string& filePath, std::vector<std::string>& fileData)
 {
-    string line;
-    ifstream myfile (filePath.c_str());
+    std::string line;
+    std::ifstream myfile (filePath.c_str());
     if (myfile.is_open())
     {
         while ( myfile.good() )
@@ -49,22 +48,22 @@ void loadDataFromFile(const string& filePath, vector<string>& fileData)
     }
 }
 
-void tokenizeString(const string& delimiter,
-                    const string& str,
-                    vector<string>& tokens)
+void tokenizeString(const std::string& delimiter,
+                    const std::string& str,
+                    std::vector<std::string>& tokens)
 {
     size_t startPos = 0;
     size_t endPos = 0;
     tokens.clear();
     bool withinQuotes = false;
-    string localDelimiter = delimiter;
+    std::string localDelimiter = delimiter;
 
     do
     {
         startPos = str.find_first_not_of(localDelimiter, startPos);
         endPos = str.find_first_of(localDelimiter, startPos);
 
-        if (startPos != string::npos)
+        if (startPos != std::string::npos)
         {
             if (str.at(startPos) == '"')
             {
@@ -72,7 +71,7 @@ void tokenizeString(const string& delimiter,
                 startPos = startPos + 1;
                 localDelimiter = "\"";
                 endPos = str.find_first_of(localDelimiter, startPos);
-                if (endPos != string::npos)
+                if (endPos != std::string::npos)
                     localDelimiter = delimiter;
             }
 
@@ -86,12 +85,12 @@ void tokenizeString(const string& delimiter,
 
         startPos = endPos;
     }
-    while (endPos != string::npos);
+    while (endPos != std::string::npos);
 }
 
-void untokenizeString(const string& delimiter,
-                      string& str,
-                      const vector<string>& tokens)
+void untokenizeString(const std::string& delimiter,
+                      std::string& str,
+                      const std::vector<std::string>& tokens)
 {
     str.clear();
     for (size_t row = 0; row < tokens.size(); ++row)
@@ -104,7 +103,7 @@ void untokenizeString(const string& delimiter,
     }
 }
 
-void getUniqueItems(string& itemName, vector<string>& uniqueItems)
+void getUniqueItems(std::string& itemName, std::vector<std::string>& uniqueItems)
 {
     bool duplicate = false;
     for (size_t item=0; item < uniqueItems.size(); ++item)
@@ -122,11 +121,11 @@ void getUniqueItems(string& itemName, vector<string>& uniqueItems)
     }
 }
 
-void write2DVectorToFile(const string filePath,
-                         const vector < vector<string> >& data,
-                         const string delimiter)
+void write2DVectorToFile(const std::string filePath,
+                         const std::vector<std::vector<std::string>>& data,
+                         const std::string delimiter)
 {
-    ofstream myfile;
+    std::ofstream myfile;
     myfile.open (filePath.c_str());
     if (myfile.is_open())
     {
@@ -153,9 +152,9 @@ void write2DVectorToFile(const string filePath,
 }
 
 
-void findReplaceAll(const string oldPattern,
-                    const string newPattern,
-                    string& data)
+void findReplaceAll(const std::string oldPattern,
+                    const std::string newPattern,
+                    std::string& data)
 {
     size_t found = 0;
     size_t oldPatternSize = oldPattern.size();
@@ -176,7 +175,7 @@ void findReplaceAll(const string oldPattern,
     }
 }
 
-void setVectorToZero(vector<size_t>& vector)
+void setVectorToZero(std::vector<size_t>& vector)
 {
     for (size_t index=0; index<vector.size(); ++index)
     {
@@ -184,7 +183,7 @@ void setVectorToZero(vector<size_t>& vector)
     }
 }
 
-void setMatrixToZero(vector< vector<size_t> >& matrix)
+void setMatrixToZero(std::vector<std::vector<size_t>>& matrix)
 {
     for (size_t row=0; row < matrix.size(); ++row)
     {
@@ -195,9 +194,9 @@ void setMatrixToZero(vector< vector<size_t> >& matrix)
     }
 }
 
-string getFilenameFromFilepath(const string& filepath)
+std::string getFilenameFromFilepath(const std::string& filepath)
 {
-    string filename = filepath;
+    std::string filename = filepath;
 
     size_t found = filename.find_last_of("/\\");
     filename = filename.substr(found+1);
@@ -208,9 +207,9 @@ string getFilenameFromFilepath(const string& filepath)
     return filename;
 }
 
-std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString)
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const std::string& dateString, const std::string& timeString)
 {
-    vector<string> timeVector;
+    std::vector<std::string> timeVector;
     tokenizeString(":", timeString, timeVector);
     std::string hours = timeVector.at(0).c_str();
     std::string minutes = timeVector.at(1).c_str();
@@ -244,12 +243,12 @@ std::string durationToHHMMSS(std::chrono::nanoseconds duration)
     return durationStream.str();
 }
 
-void parseDataInto2DVector(const vector<string>& rowData,
-                           vector< vector<string> >& parsedData)
+void parseDataInto2DVector(const std::vector<std::string>& rowData,
+                           std::vector<std::vector<std::string>>& parsedData)
 {
-    string delimiter = " ";
-    vector<string> eventLine;
-    string rawLine;
+    std::string delimiter = " ";
+    std::vector<std::string> eventLine;
+    std::string rawLine;
 
     for (size_t line=0; line<rowData.size(); ++line)
     {
@@ -259,11 +258,11 @@ void parseDataInto2DVector(const vector<string>& rowData,
 }
 
 
-void getFileListInDirectory(const string& directory, vector<string>& fileList)
+void getFileListInDirectory(const std::string& directory, std::vector<std::string>& fileList)
 {
     if (QDir(directory.c_str()).exists())
     {
-        string filePath;
+        std::string filePath;
 
         QStringList entries = QDir(directory.c_str()).entryList();
         for(QStringList::ConstIterator entry=entries.begin(); entry!=entries.end(); ++entry)
@@ -278,8 +277,8 @@ void getFileListInDirectory(const string& directory, vector<string>& fileList)
 }
 
 
-bool fileExists(const string& filePath)
+bool fileExists(const std::string& filePath)
 {
-    ifstream ifile(filePath.c_str());
+    std::ifstream ifile(filePath.c_str());
     return (ifile.is_open());
 }

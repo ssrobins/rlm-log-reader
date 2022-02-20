@@ -21,30 +21,30 @@
 #include "Utilities.h"
 
 
-void integrationTest(const string& logFileName,
-                     vector<string>& usage,
-                     vector<string>& event,
-                     vector<string>& summary)
+void integrationTest(const std::string& logFileName,
+                     std::vector<std::string>& usage,
+                     std::vector<std::string>& event,
+                     std::vector<std::string>& summary)
 {
-    string inputFilePath = testInputDirectory + "/" + logFileName;
+    std::string inputFilePath = testInputDirectory + "/" + logFileName;
     LogData logData(inputFilePath, testOutputDirectory);
     logData.publishResults();
     logData.publishEventDataResults();
-    string inputFileName = getFilenameFromFilepath(logFileName);
+    std::string inputFileName = getFilenameFromFilepath(logFileName);
     loadDataFromFile(testOutputDirectory + "/" + inputFileName + "_AllEventData.txt", event);
     loadDataFromFile(testOutputDirectory + "/" + inputFileName + "_UsageOverTime.csv", usage);
     loadDataFromFile(testOutputDirectory + "/" + inputFileName + "_Summary.txt", summary);
 }
 
-void parseReportLog(const string& logFileName,
-                    vector<string>& usage,
-                    vector<string>& event,
-                    vector<string>& summary,
-                    vector<string>& duration,
-                    vector<string>& totalDuration)
+void parseReportLog(const std::string& logFileName,
+                    std::vector<std::string>& usage,
+                    std::vector<std::string>& event,
+                    std::vector<std::string>& summary,
+                    std::vector<std::string>& duration,
+                    std::vector<std::string>& totalDuration)
 {
     integrationTest(logFileName, usage, event, summary);
-    string inputFileName = getFilenameFromFilepath(logFileName);
+    std::string inputFileName = getFilenameFromFilepath(logFileName);
     loadDataFromFile(testOutputDirectory + "/" + inputFileName + "_UsageDuration.csv", duration);
     loadDataFromFile(testOutputDirectory + "/" + inputFileName + "_TotalDuration.csv", totalDuration);
 }
@@ -52,12 +52,12 @@ void parseReportLog(const string& logFileName,
 
 TEST(IntegrationTest, ReportLog)
 {
-    string logFileName = "SampleLog_Report.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
-    vector<string> duration;
-    vector<string> totalDuration;
+    std::string logFileName = "SampleLog_Report.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
+    std::vector<std::string> duration;
+    std::vector<std::string> totalDuration;
     parseReportLog(logFileName, usage, event, summary, duration, totalDuration);
 
     // All events from log data
@@ -145,10 +145,10 @@ TEST(IntegrationTest, ReportLog)
 
 TEST(IntegrationTest, ISVLog)
 {
-    string logFileName = "SampleLog_ISV.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "SampleLog_ISV.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
 
     // All events from log data
@@ -212,10 +212,10 @@ TEST(IntegrationTest, ISVLog)
 
 TEST(IntegrationTest, ReportLogTokens)
 {
-    string logFileName = "SampleLog_Report_Tokens.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "SampleLog_Report_Tokens.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
 
     // Usage over time from log data
@@ -229,10 +229,10 @@ TEST(IntegrationTest, ReportLogTokens)
 
 TEST(IntegrationTest, ISVLogTokens)
 {
-    string logFileName = "SampleLog_ISV_Tokens.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "SampleLog_ISV_Tokens.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
 
     // Usage over time from log data
@@ -246,16 +246,16 @@ TEST(IntegrationTest, ISVLogTokens)
 
 TEST(IntegrationTest, Exception)
 {
-    string logFileName = "EventDataException.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
-    string errorMessage;
+    std::string logFileName = "EventDataException.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
+    std::string errorMessage;
     try
     {
         integrationTest(logFileName, usage, event, summary);
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         errorMessage = e.what();
     }
@@ -265,26 +265,26 @@ TEST(IntegrationTest, Exception)
 
 TEST(findFileFormat, DetectsReportLogFormat)
 {
-    string inputFilePath = testInputDirectory + "/TestFileFormatReport.txt";
+    std::string inputFilePath = testInputDirectory + "/TestFileFormatReport.txt";
     LogData logData(inputFilePath, testOutputDirectory);
     EXPECT_EQ(1, logData.fileFormat());
 }
 
 TEST(findFileFormat, DetectsISVLogFormat)
 {
-    string inputFilePath = testInputDirectory + "/TestFileFormatISV.txt";
+    std::string inputFilePath = testInputDirectory + "/TestFileFormatISV.txt";
     LogData logData(inputFilePath, testOutputDirectory);
     EXPECT_EQ(2, logData.fileFormat());
 }
 
-void detectInvalidFileTest(string& inputFilePath)
+void detectInvalidFileTest(std::string& inputFilePath)
 {
-    string errorMessage;
+    std::string errorMessage;
     try
     {
         LogData logData(inputFilePath, testOutputDirectory);
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         errorMessage = e.what();
     }
@@ -292,12 +292,12 @@ void detectInvalidFileTest(string& inputFilePath)
 }
 TEST(findFileFormat, DetectsNoFormatInEmptyFile)
 {
-    string inputFilePath = testInputDirectory + "/TestFileEmpty.txt";
+    std::string inputFilePath = testInputDirectory + "/TestFileEmpty.txt";
     detectInvalidFileTest(inputFilePath);
 }
 TEST(findFileFormat, DetectsNoFormatInInvalidFiles)
 {
-    string inputFilePath = testInputDirectory + "/TestFileFormatRLM.txt";
+    std::string inputFilePath = testInputDirectory + "/TestFileFormatRLM.txt";
     detectInvalidFileTest(inputFilePath);
 
     inputFilePath = testInputDirectory + "/TestFileFormatInvalid.txt";
@@ -307,10 +307,10 @@ TEST(findFileFormat, DetectsNoFormatInInvalidFiles)
 
 TEST(IntegrationTest, ReportLogTecplotNewYear)
 {
-    string logFilePath = "NewYear.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFilePath = "NewYear.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFilePath, usage, event, summary);
     ASSERT_EQ(5, usage.size());
     EXPECT_EQ("12/31/2012 17:55:19,6,1,50", usage.at(1));
@@ -322,10 +322,10 @@ TEST(IntegrationTest, ReportLogTecplotNewYear)
 
 TEST(removeInDetails, EventParsedCorrectly)
 {
-    string logFileName = "ISVInDetails.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "ISVInDetails.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
     ASSERT_EQ(9, event.size());
     EXPECT_EQ("IN 03/19 08:52 analytics 3.03 james macpro 1", event.at(4));
@@ -337,10 +337,10 @@ TEST(removeInDetails, EventParsedCorrectly)
 
 TEST(removeDenyDetails, EventParsedCorrectly)
 {
-    string logFileName = "ISVDenyDetails.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "ISVDenyDetails.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
     ASSERT_EQ(3, event.size());
     EXPECT_EQ("DENY 03/18 19:19 1 3.03 edgar vaio", event.at(1));
@@ -349,10 +349,10 @@ TEST(removeDenyDetails, EventParsedCorrectly)
 
 TEST(uniqueUsers, SetToOneIfSeatsAlreadyCheckedOutWhenLogStarts)
 {
-    string logFileName = "UniqueUsers.log";
-    vector<string> usage;
-    vector<string> event;
-    vector<string> summary;
+    std::string logFileName = "UniqueUsers.log";
+    std::vector<std::string> usage;
+    std::vector<std::string> event;
+    std::vector<std::string> summary;
     integrationTest(logFileName, usage, event, summary);
     ASSERT_EQ(8, usage.size());
     EXPECT_EQ("09/12/2012 15:52:41,9,1,10", usage.at(1));
@@ -366,24 +366,24 @@ TEST(uniqueUsers, SetToOneIfSeatsAlreadyCheckedOutWhenLogStarts)
 
 TEST(IntegrationTest, ExtraFiles)
 {
-    string filePath;
-    vector<string> fileList;
+    std::string filePath;
+    std::vector<std::string> fileList;
     getFileListInDirectory(extraTestDirectory, fileList);
     size_t numberOfFiles = fileList.size();
 
     if (numberOfFiles == 0)
     {
-        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-        cout << "    To test your own log files, copy them here:" << endl;
-        cout << "    " << extraTestDirectory << endl;
-        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+        std::cout << "    To test your own log files, copy them here:" << std::endl;
+        std::cout << "    " << extraTestDirectory << std::endl;
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
     }
     else
     {
         for (size_t file=0; file < numberOfFiles; ++file)
         {
             filePath = fileList.at(file);
-            cout << filePath << endl;
+            std::cout << filePath << std::endl;
             LogData logData(filePath, testOutputDirectory);
             logData.publishResults();
         }
