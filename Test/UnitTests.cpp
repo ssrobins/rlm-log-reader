@@ -118,7 +118,7 @@ TEST(parseDataVector, Simple)
     rawData.push_back("");
     rawData.push_back("");
     rawData.push_back("W00t!");
-    std::vector< std::vector<std::string> > allData;
+    std::vector<std::vector<std::string>> allData;
     parseDataInto2DVector(rawData, allData);
     ASSERT_EQ(5,allData.size());
     EXPECT_EQ("I", allData[1][0]);

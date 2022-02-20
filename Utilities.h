@@ -62,7 +62,7 @@ std::string toString(T& value)
 }
 
 void parseDataInto2DVector(const std::vector<std::string>& rawData,
-                           std::vector< std::vector<std::string> >& allData);
+                           std::vector<std::vector<std::string>>& allData);
 
 void getFileListInDirectory(const std::string& directory, std::vector<std::string>& fileList);
 

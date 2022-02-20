@@ -96,11 +96,11 @@ class LogData
         enum fileFormat m_fileFormat;
         std::vector<std::string> m_outputPaths;
         std::vector<std::string> m_rawData;
-        std::vector< std::vector<std::string> > m_allData;
-        std::vector< std::vector<std::string> > m_eventData;
-        std::vector< std::vector<std::string> > m_denialEvents;
-        std::vector< std::vector<std::string> > m_shutdownEvents;
-        std::vector< std::vector<std::string> > m_startEvents;
+        std::vector<std::vector<std::string>> m_allData;
+        std::vector<std::vector<std::string>> m_eventData;
+        std::vector<std::vector<std::string>> m_denialEvents;
+        std::vector<std::vector<std::string>> m_shutdownEvents;
+        std::vector<std::vector<std::string>> m_startEvents;
         std::vector<std::string> m_uniqueProducts;
         std::vector<std::string> m_uniqueUsers;
 
@@ -115,8 +115,8 @@ class LogData
         std::vector<size_t> m_SHUTindices;
         std::vector<size_t> m_PRODUCTindices;
 
-        std::vector< std::vector<std::string> > m_usage;
-        std::vector< std::vector<std::string> > m_usageDuration;
+        std::vector<std::vector<std::string>> m_usage;
+        std::vector<std::vector<std::string>> m_usageDuration;
         std::vector< std::vector<std::chrono::nanoseconds> > m_totalDuration;
 
         size_t m_endTimeRow;

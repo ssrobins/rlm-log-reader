@@ -244,7 +244,7 @@ std::string durationToHHMMSS(std::chrono::nanoseconds duration)
 }
 
 void parseDataInto2DVector(const std::vector<std::string>& rowData,
-                           std::vector< std::vector<std::string> >& parsedData)
+                           std::vector<std::vector<std::string>>& parsedData)
 {
     std::string delimiter = " ";
     std::vector<std::string> eventLine;
