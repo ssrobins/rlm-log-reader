@@ -117,7 +117,7 @@ class LogData
 
         std::vector<std::vector<std::string>> m_usage;
         std::vector<std::vector<std::string>> m_usageDuration;
-        std::vector< std::vector<std::chrono::nanoseconds> > m_totalDuration;
+        std::vector<std::vector<std::chrono::nanoseconds>> m_totalDuration;
 
         size_t m_endTimeRow;
 };
