@@ -17,15 +17,12 @@
 
 #pragma once
 
+#include <chrono>
 #include <string>
 #include <vector>
 #include <map>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
 
 enum fileFormat
 {
@@ -121,7 +118,7 @@ class LogData
 
         vector< vector<string> > m_usage;
         vector< vector<string> > m_usageDuration;
-        vector< vector<time_duration> > m_totalDuration;
+        vector< vector<std::chrono::nanoseconds> > m_totalDuration;
 
         size_t m_endTimeRow;
 };

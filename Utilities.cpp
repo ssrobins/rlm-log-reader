@@ -15,19 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "date/date.h"
 #include "Utilities.h"
 #include "Exceptions.h"
+#include "qdir.h"
 #include <fstream>
 #include <string>
 #include <vector>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 using namespace std;
-using namespace boost::filesystem;
 
 void loadDataFromFile(const string& filePath, vector<string>& fileData)
 {
@@ -212,32 +208,41 @@ string getFilenameFromFilepath(const string& filepath)
     return filename;
 }
 
-
-ptime stringToBoostTime(string& dateString,
-                        string& timeString)
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString)
 {
-    date boostDate(from_us_string(dateString));
-
     vector<string> timeVector;
     tokenizeString(":", timeString, timeVector);
-    int intHours = atoi(timeVector.at(0).c_str());
-    int intMinutes = atoi(timeVector.at(1).c_str());
-    int intSeconds;
+    std::string hours = timeVector.at(0).c_str();
+    std::string minutes = timeVector.at(1).c_str();
+    std::string seconds;
 
     if (timeVector.size() < 3)
     {
-        intSeconds = 0;
+        seconds = "00";
     }
     else
     {
-        intSeconds = atoi(timeVector.at(2).c_str());
+        seconds = timeVector.at(2).c_str();
     }
 
-    ptime dateTime(boostDate, hours(intHours)+minutes(intMinutes)+seconds(intSeconds));
-    
-    return dateTime;
+    const std::string datetime = dateString + " " + hours + ":" + minutes + ":" + seconds;
+    std::istringstream in{datetime};
+    std::chrono::time_point<std::chrono::system_clock> tp;
+    using namespace date;
+    in >> date::parse("%m/%d/%Y %T", tp);
+
+    return tp;
 }
 
+std::string durationToHHMMSS(std::chrono::nanoseconds duration)
+{
+    auto durationFloorSeconds = date::floor<std::chrono::seconds>(duration);
+    using namespace date;
+    std::ostringstream durationStream;
+    durationStream << date::format("%T", durationFloorSeconds);
+
+    return durationStream.str();
+}
 
 void parseDataInto2DVector(const vector<string>& rowData,
                            vector< vector<string> >& parsedData)
@@ -256,17 +261,16 @@ void parseDataInto2DVector(const vector<string>& rowData,
 
 void getFileListInDirectory(const string& directory, vector<string>& fileList)
 {
-    if (is_directory(directory))
+    if (QDir(directory.c_str()).exists())
     {
         string filePath;
-        directory_iterator end;
 
-        for(directory_iterator iter(directory); iter != end; ++iter)
+        QStringList entries = QDir(directory.c_str()).entryList();
+        for(QStringList::ConstIterator entry=entries.begin(); entry!=entries.end(); ++entry)
         {
-            if (! is_directory( *iter ) )
+            if (!QDir(*entry).exists())
             {
-                filePath = toString(iter->path());
-                findReplaceAll("\"", "", filePath);
+                filePath = QDir((*entry)).absolutePath().toLocal8Bit().constData();
                 fileList.push_back(filePath);
             }
         }

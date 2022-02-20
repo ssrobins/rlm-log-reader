@@ -17,14 +17,11 @@
 
 #pragma once
 
+#include <chrono>
 #include <vector>
 #include <string>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
-using namespace boost::posix_time;
-using namespace boost::gregorian;
 
 
 void loadDataFromFile(const string& filePath, vector<string>& fileData);
@@ -52,10 +49,9 @@ void setMatrixToZero(vector< vector<size_t> >& matrix);
 
 string getFilenameFromFilepath(const string& filepath);
 
-ptime stringToBoostTime(string& dateString,
-                        string& timeString);
+std::chrono::time_point<std::chrono::system_clock> stringToTime(const string& dateString, const string& timeString);
 
-string boostTimeToString(ptime& dateTime);
+std::string durationToHHMMSS(std::chrono::nanoseconds duration);
 
 template <typename T>
 string toString(T& value)

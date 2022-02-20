@@ -19,7 +19,6 @@
 #include "gtest/gtest.h"
 #include "TestConfig.h"
 #include "Utilities.h"
-#include <boost/date_time/gregorian/gregorian.hpp>
 
 
 void integrationTest(const string& logFileName,

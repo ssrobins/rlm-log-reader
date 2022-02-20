@@ -15,15 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with RLM Log Reader.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "date/date.h"
 #include "LogData.h"
 #include "Utilities.h"
 #include "TestConfig.h"
 #include "gtest/gtest.h"
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-
-using namespace boost::posix_time;
-using namespace boost::gregorian;
 
 
 void lineBreakTests(vector<string>& rawData)
@@ -164,24 +160,57 @@ TEST(getUniqueItems, NewItemIsUnique)
 }
 
 
-TEST(stringToBoostTime, HoursMinutesSeconds)
+TEST(durationToHHMMSS, OneSecond)
+{
+    auto duration = 1s;
+
+    EXPECT_EQ("00:00:01", durationToHHMMSS(duration));
+}
+
+
+TEST(durationToHHMMSS, OneMinute)
+{
+    auto duration = 60s;
+
+    EXPECT_EQ("00:01:00", durationToHHMMSS(duration));
+}
+
+
+TEST(durationToHHMMSS, OneHour)
+{
+    auto duration = 3600s;
+
+    EXPECT_EQ("01:00:00", durationToHHMMSS(duration));
+}
+
+
+TEST(stringToTime, HoursMinutesSeconds)
 {
     string dateString = "05/11/2012";
     string timeString = "17:34:48";
-    ptime dateTime = stringToBoostTime(dateString, timeString);
+    std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ("2012-May-11 17:34:48" , toString(dateTime));
+    std::ostringstream datetimestream;
+    using namespace date;
+    datetimestream << date::format("%F %T", date::floor<std::chrono::seconds>(datetime));
+
+    EXPECT_EQ("2012-05-11 17:34:48", datetimestream.str());
 }
 
 
-TEST(stringToBoostTime, HoursMinutes)
+TEST(stringToTime, HoursMinutes)
 {
     string dateString = "05/11/2012";
     string timeString = "17:34";
-    ptime dateTime = stringToBoostTime(dateString, timeString);
+    std::chrono::time_point<std::chrono::system_clock> datetime = stringToTime(dateString, timeString);
 
-    EXPECT_EQ("2012-May-11 17:34:00", toString(dateTime));
+    std::ostringstream datetimestream;
+    using namespace date;
+    datetimestream << date::format("%F %T", date::floor<std::chrono::seconds>(datetime));
+
+    EXPECT_EQ("2012-05-11 17:34:00", datetimestream.str());
 }
+
 
 TEST(getFileNamesInDirectory, works)
 {

@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <assert.h>
 #include <map>
-#include <boost/date_time/gregorian/gregorian.hpp>
 #include "LogData.h"
 
 using namespace std;
@@ -735,10 +734,10 @@ void LogData::getUsageDuration()
     // Initialize matrix for total duration by user and product
     for (size_t row=0; row < m_uniqueUsers.size(); ++row)
     {
-        vector<time_duration> tempDurationVector;
+        vector<std::chrono::nanoseconds> tempDurationVector;
         for (size_t col=0; col < m_uniqueProducts.size(); ++col)
         {
-            time_duration td = seconds(0);
+            std::chrono::nanoseconds td = std::chrono::seconds{0};
             tempDurationVector.push_back(td);
         }
         m_totalDuration.push_back(tempDurationVector);
@@ -752,9 +751,9 @@ void LogData::getUsageDuration()
             string handle = m_eventData.at(row).at(IndexHandle);
             string product = m_eventData.at(row).at(IndexProduct);
             string userName = m_eventData.at(row).at(IndexUser);
-            ptime startTime = stringToBoostTime(m_eventData.at(row).at(IndexDate),
+            auto startTime = stringToTime(m_eventData.at(row).at(IndexDate),
                                                 m_eventData.at(row).at(IndexTime));
-            ptime endTime;
+            std::chrono::time_point<std::chrono::system_clock> endTime;
 
             for(size_t newRow=row+1; newRow < m_eventData.size(); ++newRow)
             {
@@ -762,7 +761,7 @@ void LogData::getUsageDuration()
                 {
                     if (m_eventData.at(newRow).at(IndexHandle) == handle)
                     {
-                        endTime = stringToBoostTime(m_eventData.at(newRow).at(IndexDate),
+                        endTime = stringToTime(m_eventData.at(newRow).at(IndexDate),
                                                     m_eventData.at(newRow).at(IndexTime));
                         checkInRow = newRow;
                         break;
@@ -772,7 +771,7 @@ void LogData::getUsageDuration()
                 // any checked out licenses
                 if (m_eventData.at(newRow).at(IndexEvent) == "SHUTDOWN")
                 {
-                    endTime = stringToBoostTime(m_eventData.at(newRow).at(IndexDate),
+                    endTime = stringToTime(m_eventData.at(newRow).at(IndexDate),
                                                 m_eventData.at(newRow).at(IndexTime));
                     checkInRow = newRow;
                     break;
@@ -781,12 +780,12 @@ void LogData::getUsageDuration()
 
             if (checkInRow == -1)
             {
-                endTime = stringToBoostTime(m_eventData.at(m_endTimeRow).at(IndexDate),
+                endTime = stringToTime(m_eventData.at(m_endTimeRow).at(IndexDate),
                                             m_eventData.at(m_endTimeRow).at(IndexTime));
             }
-            time_duration usageDuration = endTime - startTime;
+            std::chrono::nanoseconds usageDuration = endTime - startTime;
             m_totalDuration.at(getIndex(userName, m_uniqueUsers)).at(getIndex(product, m_uniqueProducts)) += usageDuration;
-            string usageDurationString = toString(usageDuration);
+            string usageDurationString = durationToHHMMSS(usageDuration);
             
             vector<string> tempVector;
 
@@ -907,13 +906,13 @@ void LogData::writeTotalDuration(const string& outputFilePath)
 
         for (size_t row=0; row < m_uniqueUsers.size(); ++row)
         {
-            vector<time_duration> tempDurationVector;
+            vector<std::chrono::nanoseconds> tempDurationVector;
             myfile << m_uniqueUsers.at(row) << ",";
             
             size_t columnSize = m_uniqueProducts.size();
             for (size_t col=0; col < columnSize; ++col)
             {
-                string usageDurationString = toString(m_totalDuration.at(row).at(col));
+                string usageDurationString = durationToHHMMSS(m_totalDuration.at(row).at(col));
                 myfile << usageDurationString;
                 if (col != columnSize-1)
                 {
