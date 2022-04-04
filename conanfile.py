@@ -11,4 +11,4 @@ class Conan(ConanFile):
         self.requires("gtest/1.11.0")
         self.requires("qt/5.15.2")
         self.requires("expat/2.4.2")
-        self.requires("openssl/1.1.1l")
+        self.requires("openssl/1.1.1n")
