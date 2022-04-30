@@ -26,7 +26,7 @@ jobs:
             build_script: ./cmake.py linux
             artifact_path: build_linux/_package/*.tar.gz
           - name: macos
-            os: macos-11
+            os: macos-12
             build_script: ./cmake.py macos
             artifact_path: build_macos/_package/*.zip
           - name:  windows
@@ -64,7 +64,7 @@ jobs:
       - name: Build
         run:  ${{ matrix.build_script }} --noConanPkgBuild --build --test --package --config Release
         env:
-          DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+          DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
 
       - uses: actions/upload-artifact@v2
         with:
