@@ -267,11 +267,3 @@ TEST(fileExists, False)
     std::string filePath = testInputDirectory + "/TestFileThatDoesNotExist.txt";
     EXPECT_FALSE(fileExists(filePath));
 }
-
-
-int main(int argc, char** argv)
-{
-    testing::InitGoogleTest(&argc, argv); 
-    int returnCode = RUN_ALL_TESTS();
-    return returnCode;
-}
